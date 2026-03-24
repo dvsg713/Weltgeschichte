@@ -2,31 +2,49 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Die Welt – Lerntracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Lern-Dashboard">
+<meta name="theme-color" content="#f5f3ef">
+<title>Mein Lern-Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f7f5f2;
+  --bg: #f5f3ef;
   --surface: #ffffff;
-  --surface2: #f0ede8;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.14);
-  --gold: #9a6e1a;
-  --gold-light: #7a5210;
-  --gold-dim: rgba(154,110,26,0.10);
+  --surface2: #eeebe5;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+
+  --history: #5c4a1e;
+  --history-bg: #fdf6e7;
+  --history-mid: #c9962a;
+  --history-dim: rgba(201,150,42,0.12);
+
+  --sport: #1e4a3a;
+  --sport-bg: #e8f5f0;
+  --sport-mid: #2a8c63;
+  --sport-dim: rgba(42,140,99,0.12);
+
+  --lang: #1e2f5c;
+  --lang-bg: #eaeefc;
+  --lang-mid: #3a5cc9;
+  --lang-dim: rgba(58,92,201,0.12);
+
   --text: #1a1714;
-  --text-muted: #6a6050;
-  --text-dim: #aaa090;
-  --green: #2e7d57;
-  --green-light: #1f5e3e;
-  --green-dim: rgba(46,125,87,0.10);
-  --red: #b04030;
-  --amber: #a06020;
-  --radius: 8px;
-  --radius-lg: 14px;
+  --text-muted: #6a6355;
+  --text-dim: #b0a898;
+
+  --red: #c0402a;
+  --red-dim: rgba(192,64,42,0.10);
+
+  --radius: 10px;
+  --radius-lg: 16px;
 }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
@@ -34,262 +52,115 @@ body {
   min-height: 100vh;
   font-size: 15px;
 }
-/* HEADER */
-.site-header {
-  border-bottom: 1px solid var(--border);
-  padding: 28px 40px 24px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.site-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--gold-light);
-  letter-spacing: -0.5px;
-}
-.site-subtitle {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-.progress-wrap {
+
+/* TOP NAV */
+.topnav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border2);
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex: 1;
-  max-width: 420px;
-}
-.progress-track {
-  flex: 1;
-  height: 4px;
-  background: var(--surface2);
-  border-radius: 99px;
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 99px;
-  transition: width 0.5s ease;
-}
-.progress-text {
-  font-size: 13px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-/* LAYOUT */
-.layout {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  min-height: calc(100vh - 89px);
-}
-/* SIDEBAR */
-.sidebar {
-  border-right: 1px solid var(--border);
-  padding: 20px 0;
+  gap: 0;
+  padding: 0 24px;
   position: sticky;
   top: 0;
-  height: calc(100vh - 89px);
-  overflow-y: auto;
+  z-index: 100;
 }
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-track { background: transparent; }
-.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 20px;
-  cursor: pointer;
-  font-size: 13px;
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  padding: 16px 20px 16px 0;
+  border-right: 1px solid var(--border2);
+  margin-right: 8px;
+  white-space: nowrap;
+}
+.nav-tab {
+  padding: 18px 18px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text-muted);
-  border-left: 2px solid transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
   transition: all 0.15s;
+  white-space: nowrap;
   user-select: none;
 }
-.nav-item:hover { color: var(--text); background: var(--surface); }
-.nav-item.active { color: var(--gold-light); border-left-color: var(--gold); background: var(--gold-dim); }
-.nav-icon { font-size: 14px; width: 18px; text-align: center; }
-.nav-badge {
-  margin-left: auto;
-  font-size: 11px;
-  background: var(--red);
-  color: #fff;
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active-history { color: var(--history); border-bottom-color: var(--history-mid); }
+.nav-tab.active-sport { color: var(--sport); border-bottom-color: var(--sport-mid); }
+.nav-tab.active-lang { color: var(--lang); border-bottom-color: var(--lang-mid); }
+.nav-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
   border-radius: 99px;
-  padding: 1px 7px;
-  font-weight: 500;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
 }
-.nav-section {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  padding: 16px 20px 6px;
-  font-weight: 500;
+
+/* PAGES */
+.page { display: none; padding: 28px 28px; max-width: 900px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* PAGE HEADER */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-/* MAIN */
-.main { padding: 32px 40px; overflow-y: auto; }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-/* CARDS GRID */
+.page-title {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+/* STAT GRID */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
 }
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 16px 18px;
+  padding: 14px 16px;
 }
-.stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
-.stat-value { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold-light); }
-.stat-sub { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-/* CHAPTER LIST */
-.act-group { margin-bottom: 8px; }
-.act-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.15s;
-}
-.act-header:hover { background: var(--surface2); }
-.act-title { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
-.act-progress { font-size: 12px; color: var(--text-muted); }
-.act-chevron { color: var(--text-dim); font-size: 12px; transition: transform 0.2s; }
-.act-group.open .act-chevron { transform: rotate(90deg); }
-.act-chapters { display: none; padding: 4px 0 8px; }
-.act-group.open .act-chapters { display: block; }
-.chap-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 14px 8px 28px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: background 0.1s;
-  border-bottom: 1px solid transparent;
-}
-.chap-row:hover { background: var(--surface); }
-.chap-row.done .chap-title { color: var(--text-dim); text-decoration: line-through; }
-.chap-row.next-up { background: var(--gold-dim); border-color: rgba(201,168,76,0.2); }
-.chap-row.next-up .chap-title { color: var(--gold-light); }
-.chap-cb {
-  width: 16px; height: 16px;
-  border-radius: 4px;
-  border: 1.5px solid var(--border2);
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
-.chap-cb.checked { background: var(--green); border-color: var(--green); }
-.chap-check { display: none; color: #fff; font-size: 10px; }
-.chap-cb.checked .chap-check { display: block; }
-.chap-title { font-size: 13px; color: var(--text); flex: 1; line-height: 1.4; }
-.next-badge {
-  font-size: 10px;
-  background: var(--gold-dim);
-  color: var(--gold);
-  border: 1px solid rgba(201,168,76,0.3);
-  padding: 2px 8px;
-  border-radius: 99px;
-  white-space: nowrap;
-}
-.due-badge {
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 99px;
-  white-space: nowrap;
-  border: 1px solid;
-}
-.due-today { background: rgba(192,90,74,0.15); color: #e07060; border-color: rgba(192,90,74,0.3); }
-.due-soon { background: rgba(192,128,64,0.15); color: #e09050; border-color: rgba(192,128,64,0.3); }
-.due-done { background: var(--green-dim); color: var(--green-light); border-color: rgba(74,140,111,0.3); }
-/* REVIEW PANEL */
+.stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.stat-value { font-family: 'Fraunces', serif; font-size: 28px; line-height: 1; }
+.stat-sub { font-size: 12px; color: var(--text-dim); margin-top: 3px; }
+
+/* SECTION */
+.section { margin-bottom: 24px; }
 .section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  color: var(--gold-light);
-  margin-bottom: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
 }
-.review-list { display: flex; flex-direction: column; gap: 10px; }
-.review-item {
+
+/* CARD */
+.card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 14px 18px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
 }
-.review-item.urgent { border-color: rgba(192,90,74,0.4); }
-.review-date-block { text-align: center; min-width: 46px; }
-.review-day { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold-light); line-height: 1; }
-.review-month { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
-.review-info { flex: 1; }
-.review-chap { font-size: 14px; color: var(--text); font-weight: 500; margin-bottom: 4px; }
-.review-meta { font-size: 12px; color: var(--text-muted); }
-.review-rounds { display: flex; gap: 4px; margin-top: 8px; }
-.round-dot {
-  width: 8px; height: 8px; border-radius: 99px;
-  border: 1.5px solid var(--border2);
-  transition: all 0.2s;
-}
-.round-dot.done-r { background: var(--green); border-color: var(--green); }
-.round-dot.current-r { background: var(--gold); border-color: var(--gold); }
-.review-action button {
-  padding: 6px 14px;
-  border-radius: var(--radius);
-  border: 1px solid var(--green);
-  background: var(--green-dim);
-  color: var(--green-light);
-  font-size: 12px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.review-action button:hover { background: var(--green); color: #fff; }
-/* FLASHCARDS */
-.fc-wrap { perspective: 900px; margin-bottom: 20px; cursor: pointer; }
-.fc-inner {
-  width: 100%; min-height: 200px;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
-  border-radius: var(--radius-lg);
-}
-.fc-inner.flipped { transform: rotateY(180deg); }
-.fc-face {
-  position: absolute; width: 100%; min-height: 200px;
-  backface-visibility: hidden;
-  border-radius: var(--radius-lg);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 2rem;
-  border: 1px solid var(--border2);
-}
-.fc-front { background: var(--surface); }
-.fc-back { background: #eef7f2; transform: rotateY(180deg); border-color: var(--gold-dim); }
-.fc-q { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); text-align: center; line-height: 1.5; }
-.fc-a { font-size: 15px; color: var(--gold-light); text-align: center; line-height: 1.7; }
-.fc-hint { font-size: 11px; color: var(--text-dim); margin-top: 16px; }
-.fc-chap { font-size: 11px; color: var(--text-dim); margin-top: 8px; }
-.fc-nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; }
+
+/* BUTTONS */
 .btn {
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: var(--radius);
   border: 1px solid var(--border2);
   background: transparent;
@@ -300,22 +171,20 @@ body {
   transition: all 0.15s;
 }
 .btn:hover { background: var(--surface2); color: var(--text); }
-.btn-gold {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: var(--gold-dim);
-}
-.btn-gold:hover { background: var(--gold); color: var(--bg); }
-/* CARD FORM */
-.form-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 24px;
-  margin-bottom: 20px;
-}
-.form-card label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
-.form-card input, .form-card textarea, .form-card select {
+.btn-history { border-color: var(--history-mid); color: var(--history); background: var(--history-dim); }
+.btn-history:hover { background: var(--history-mid); color: #fff; }
+.btn-sport { border-color: var(--sport-mid); color: var(--sport); background: var(--sport-dim); }
+.btn-sport:hover { background: var(--sport-mid); color: #fff; }
+.btn-lang { border-color: var(--lang-mid); color: var(--lang); background: var(--lang-dim); }
+.btn-lang:hover { background: var(--lang-mid); color: #fff; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-danger { border-color: rgba(192,64,42,0.3); color: var(--red); }
+.btn-danger:hover { background: var(--red-dim); }
+
+/* FORM */
+.form-row { margin-bottom: 12px; }
+.form-row label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.form-row input, .form-row textarea, .form-row select {
   width: 100%;
   background: var(--bg);
   border: 1px solid var(--border2);
@@ -324,579 +193,1145 @@ body {
   font-size: 14px;
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
-  margin-bottom: 14px;
-  resize: vertical;
   transition: border-color 0.15s;
 }
-.form-card input:focus, .form-card textarea:focus, .form-card select:focus {
-  outline: none; border-color: var(--gold);
-}
-.form-card textarea { min-height: 80px; }
-.form-card select option { background: var(--surface2); }
-/* EXPORT */
-.export-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px 24px;
-  margin-bottom: 16px;
-}
-.export-box h3 { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--gold-light); margin-bottom: 8px; }
-.export-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; }
-.code-area {
-  width: 100%;
-  background: var(--bg);
+.form-row input:focus, .form-row textarea:focus, .form-row select:focus { outline: none; border-color: var(--lang-mid); }
+.form-row textarea { min-height: 70px; resize: vertical; }
+.form-row select option { background: #fff; }
+
+/* PROGRESS BAR */
+.prog-wrap { background: var(--surface2); border-radius: 99px; height: 6px; overflow: hidden; margin-top: 6px; }
+.prog-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+.prog-history { background: var(--history-mid); }
+.prog-lang { background: var(--lang-mid); }
+.prog-sport { background: var(--sport-mid); }
+
+/* STREAK */
+.streak-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+.streak-day {
+  width: 32px; height: 32px;
+  border-radius: 8px;
   border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 10px 12px;
-  font-size: 11px;
-  font-family: monospace;
-  color: var(--text-muted);
-  min-height: 80px;
-  resize: vertical;
-  margin-bottom: 10px;
-}
-/* TOAST */
-.toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: var(--green); color: #fff;
-  padding: 9px 22px; border-radius: 99px;
-  font-size: 13px; opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none; z-index: 999;
-}
-.toast.show { opacity: 1; }
-/* CALENDAR */
-.cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-  margin-bottom: 20px;
-}
-.cal-day-name { font-size: 10px; color: var(--text-dim); text-align: center; padding: 4px 0; text-transform: uppercase; letter-spacing: 0.05em; }
-.cal-day {
-  aspect-ratio: 1;
-  border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px;
   color: var(--text-dim);
-  cursor: default;
-  position: relative;
-}
-.cal-day.has-due { background: rgba(192,90,74,0.2); color: #e07060; font-weight: 500; cursor: pointer; }
-.cal-day.has-due:hover { background: rgba(192,90,74,0.35); }
-.cal-day.today { border: 1px solid var(--gold); color: var(--gold); }
-.cal-day.done-all { background: var(--green-dim); color: var(--green-light); }
-.cal-month { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
-.cal-nav { background: transparent; border: 1px solid var(--border2); color: var(--text-muted); padding: 4px 10px; border-radius: var(--radius); cursor: pointer; font-size: 13px; }
-.cal-nav:hover { background: var(--surface2); color: var(--text); }
-.empty-state { text-align: center; padding: 3rem; color: var(--text-dim); font-size: 14px; }
-.divider { height: 1px; background: var(--border); margin: 24px 0; }
-.filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-.filter-row select {
   background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 6px 10px;
-  font-size: 13px;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-direction: column;
+  gap: 1px;
 }
-.card-list { display: flex; flex-direction: column; gap: 8px; }
-.card-item {
+.streak-day:hover { border-color: var(--border2); background: var(--surface2); }
+.streak-day.done-history { background: var(--history-dim); border-color: var(--history-mid); color: var(--history); }
+.streak-day.done-sport { background: var(--sport-dim); border-color: var(--sport-mid); color: var(--sport); }
+.streak-day.done-lang { background: var(--lang-dim); border-color: var(--lang-mid); color: var(--lang); }
+.streak-day.today { border-width: 2px; font-weight: 500; }
+.streak-label { font-size: 9px; }
+
+/* WEEK PLAN */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.week-day {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 12px 16px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
-.card-item-q { font-size: 14px; color: var(--text); font-weight: 500; }
-.card-item-a { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-.card-item-meta { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
-.row-actions { display: flex; gap: 6px; margin-top: 8px; }
-.btn-sm { padding: 4px 10px; font-size: 12px; }
-.btn-danger { border-color: rgba(192,90,74,0.4); color: var(--red); }
-.btn-danger:hover { background: rgba(192,90,74,0.15); }
+.week-day:hover { background: var(--surface2); }
+.week-day.today-wd { border-color: var(--sport-mid); border-width: 2px; }
+.week-day.done-wd { background: var(--sport-dim); border-color: var(--sport-mid); }
+.wd-name { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 500; }
+.wd-exercise { font-size: 11px; color: var(--text); line-height: 1.3; margin-top: 2px; }
+.wd-check { font-size: 16px; margin-top: 2px; }
+.wd-rest { color: var(--text-dim); font-size: 11px; }
+
+/* LANGUAGE TABS */
+.lang-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.lang-tab {
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--border2);
+  font-size: 13px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.lang-tab:hover { background: var(--surface2); }
+.lang-tab.active { background: var(--lang-dim); border-color: var(--lang-mid); color: var(--lang); font-weight: 500; }
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid;
+}
+.badge-due { background: var(--red-dim); color: var(--red); border-color: rgba(192,64,42,0.25); }
+.badge-ok { background: var(--sport-dim); color: var(--sport); border-color: rgba(42,140,99,0.25); }
+.badge-soon { background: rgba(192,128,0,0.1); color: #7a5000; border-color: rgba(192,128,0,0.25); }
+
+/* CHAPTER LIST */
+.act-group { margin-bottom: 6px; }
+.act-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+.act-hdr:hover { background: var(--surface2); }
+.act-hdr-title { font-size: 13px; font-weight: 500; flex: 1; }
+.act-hdr-prog { font-size: 12px; color: var(--text-muted); }
+.act-chevron { color: var(--text-dim); font-size: 11px; transition: transform 0.2s; }
+.act-group.open .act-chevron { transform: rotate(90deg); }
+.act-chapters { display: none; padding: 2px 0 6px; }
+.act-group.open .act-chapters { display: block; }
+.chap-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 14px 7px 26px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.chap-row:hover { background: var(--surface2); }
+.chap-row.done-ch .chap-title { color: var(--text-dim); text-decoration: line-through; }
+.chap-row.next-ch { background: var(--history-dim); }
+.chap-row.next-ch .chap-title { color: var(--history); }
+.chap-cb {
+  width: 16px; height: 16px; border-radius: 4px;
+  border: 1.5px solid var(--border2);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.chap-cb.checked { background: var(--history-mid); border-color: var(--history-mid); }
+.chap-check { display: none; color: #fff; font-size: 10px; }
+.chap-cb.checked .chap-check { display: block; }
+.chap-title { font-size: 13px; flex: 1; line-height: 1.4; }
+
+/* FLASHCARD */
+.fc-wrap { perspective: 900px; margin-bottom: 16px; cursor: pointer; }
+.fc-inner {
+  width: 100%; min-height: 160px;
+  position: relative; transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  border-radius: var(--radius-lg);
+}
+.fc-inner.flipped { transform: rotateY(180deg); }
+.fc-face {
+  position: absolute; width: 100%; min-height: 160px;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 1.5rem; border: 1px solid var(--border2);
+}
+.fc-front { background: var(--surface); }
+.fc-back { transform: rotateY(180deg); }
+.fc-back-history { background: var(--history-bg); }
+.fc-back-lang { background: var(--lang-bg); }
+.fc-q { font-family: 'Fraunces', serif; font-size: 18px; text-align: center; line-height: 1.5; }
+.fc-a { font-size: 15px; text-align: center; line-height: 1.6; }
+.fc-hint { font-size: 11px; color: var(--text-dim); margin-top: 12px; }
+.fc-nav { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
+
+/* REVIEW ITEMS */
+.review-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 12px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 8px;
+}
+.review-item.urgent { border-color: rgba(192,64,42,0.3); }
+.review-date { min-width: 42px; text-align: center; }
+.review-day { font-family: 'Fraunces', serif; font-size: 20px; line-height: 1; }
+.review-month { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+.review-info { flex: 1; }
+.review-chap { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+.review-meta { font-size: 12px; color: var(--text-muted); }
+.round-dots { display: flex; gap: 4px; margin-top: 6px; }
+.round-dot { width: 8px; height: 8px; border-radius: 99px; border: 1.5px solid var(--border2); }
+.round-dot.done-r { background: var(--history-mid); border-color: var(--history-mid); }
+.round-dot.cur-r { background: var(--history-mid); border-color: var(--history-mid); opacity: 0.4; }
+
+/* EXPORT */
+.code-area {
+  width: 100%; background: var(--bg);
+  border: 1px solid var(--border2); border-radius: var(--radius);
+  padding: 10px 12px; font-size: 11px; font-family: monospace;
+  color: var(--text-muted); min-height: 80px; resize: vertical;
+}
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #1a1714; color: #fff;
+  padding: 9px 20px; border-radius: 99px;
+  font-size: 13px; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none; z-index: 9999;
+}
+.toast.show { opacity: 1; }
+
+/* TRAINING LOG */
+.log-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.log-date { font-size: 12px; color: var(--text-muted); min-width: 70px; }
+.log-type { font-size: 13px; flex: 1; }
+.log-dur { font-size: 12px; color: var(--text-muted); }
+
+/* LANG STATS */
+.lang-stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.lang-flag { font-size: 20px; width: 28px; text-align: center; }
+.lang-name { font-size: 14px; font-weight: 500; flex: 1; }
+.lang-streak-num { font-family: 'Fraunces', serif; font-size: 20px; color: var(--lang-mid); min-width: 32px; text-align: right; }
+
+/* MIN LOG */
+.min-log-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* HOME STREAK CARDS */
+.streak-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.18s;
+  user-select: none;
+}
+.streak-card:hover { border-color: var(--border2); background: var(--surface2); }
+.streak-card.done-card { border-width: 2px; }
+.streak-card.done-history { border-color: var(--history-mid); background: var(--history-dim); }
+.streak-card.done-sport { border-color: var(--sport-mid); background: var(--sport-dim); }
+.streak-card.done-lang-es { border-color: var(--lang-mid); background: var(--lang-dim); }
+.streak-card.done-lang-fr { border-color: var(--lang-mid); background: var(--lang-dim); }
+.streak-card.done-lang-sv { border-color: var(--lang-mid); background: var(--lang-dim); }
+.sc-icon { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
+.sc-info { flex: 1; }
+.sc-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.sc-sub { font-size: 12px; color: var(--text-muted); }
+.sc-streak { font-family: 'Fraunces', serif; font-size: 28px; line-height: 1; flex-shrink: 0; }
+.sc-check {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  transition: all 0.18s;
+}
+.streak-card.done-history .sc-check { background: var(--history-mid); border-color: var(--history-mid); color: #fff; }
+.streak-card.done-sport .sc-check { background: var(--sport-mid); border-color: var(--sport-mid); color: #fff; }
+.streak-card.done-lang-es .sc-check,
+.streak-card.done-lang-fr .sc-check,
+.streak-card.done-lang-sv .sc-check { background: var(--lang-mid); border-color: var(--lang-mid); color: #fff; }
+
+/* HOME WEEK GRID */
+.home-week { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+.home-week-day {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 8px 4px;
+  text-align: center; min-height: 90px;
+}
+.home-week-day.hwd-today { border-color: var(--border2); border-width: 2px; }
+.hwd-name { font-size: 9px; text-transform: uppercase; letter-spacing:.05em; color: var(--text-muted); margin-bottom:4px; }
+.hwd-dots { display:flex; flex-direction:column; gap:3px; align-items:center; margin-top:4px; }
+.hwd-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border2);
+  transition: all 0.15s;
+}
+.hwd-dot.dot-history { background: var(--history-mid); border-color: var(--history-mid); }
+.hwd-dot.dot-sport { background: var(--sport-mid); border-color: var(--sport-mid); }
+.hwd-dot.dot-lang { background: var(--lang-mid); border-color: var(--lang-mid); }
+/* BOTTOM TAB BAR (mobile) */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border2);
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  z-index: 200;
+  justify-content: space-around;
+}
+.bottom-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 16px; cursor: pointer; user-select: none;
+  color: var(--text-muted); font-size: 10px; font-weight: 500;
+  transition: color 0.15s; min-width: 60px;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-tab .bt-icon { font-size: 22px; line-height: 1; }
+.bottom-tab.active-home,
+.bottom-tab.active-history { color: var(--history-mid); }
+.bottom-tab.active-sport { color: var(--sport-mid); }
+.bottom-tab.active-lang { color: var(--lang-mid); }
+
+@media (max-width: 700px) {
+  .topnav { display: none; }
+  .bottom-nav { display: flex; }
+  body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+  .page { padding: 16px 14px; }
+  .page-title { font-size: 22px; }
+  .week-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .home-week { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .streak-card { padding: 14px 14px; gap: 12px; }
+  .sc-icon { font-size: 24px; width: 36px; }
+  .sc-name { font-size: 14px; }
+  .sc-streak { font-size: 22px; }
+  .sc-check { width: 36px; height: 36px; font-size: 16px; }
+  .btn { padding: 10px 14px; font-size: 14px; }
+  .btn-sm { padding: 8px 12px; font-size: 13px; }
+  .chap-row { padding: 10px 10px 10px 22px; }
+  .chap-title { font-size: 13px; }
+  .act-hdr { padding: 11px 12px; }
+  .form-row input, .form-row textarea, .form-row select { font-size: 16px; padding: 11px 12px; }
+  .lang-tab { padding: 8px 14px; font-size: 14px; }
+  .week-day { min-height: 70px; padding: 8px 4px; }
+  .wd-exercise { font-size: 10px; }
+  .log-item { padding: 10px 12px; }
+  .card { padding: 14px 14px; }
+  .min-log-row { flex-direction: column; align-items: stretch; }
+  .min-log-row input, .min-log-row select { width: 100%; font-size: 16px; }
+  .hwd-name { font-size: 8px; }
+  .home-week-day { padding: 6px 2px; min-height: 70px; }
+  .review-item { padding: 10px 12px; gap: 10px; }
+  .fc-q { font-size: 17px; }
+  .stat-card { padding: 12px 14px; }
+  .stat-value { font-size: 24px; }
+}
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
 
-<header class="site-header">
-  <div>
-    <div class="site-title">Die Welt</div>
-    <div class="site-subtitle">Simon Sebag Montefiore — Lerntracker</div>
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bottom-tab" id="btab-home" onclick="showPage('home')">
+    <span class="bt-icon">🏠</span>Heute
   </div>
-  <div class="progress-wrap">
-    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
-    <span class="progress-text" id="progText">0 / 481</span>
+  <div class="bottom-tab" id="btab-history" onclick="showPage('history')">
+    <span class="bt-icon">📖</span>Geschichte
   </div>
-</header>
+  <div class="bottom-tab" id="btab-sport" onclick="showPage('sport')">
+    <span class="bt-icon">💪</span>Sport
+  </div>
+  <div class="bottom-tab" id="btab-lang" onclick="showPage('lang')">
+    <span class="bt-icon">🌍</span>Sprachen
+  </div>
+</nav>
 
-<div class="layout">
-  <nav class="sidebar">
-    <div class="nav-section">Navigation</div>
-    <div class="nav-item active" onclick="showTab('chapters')"><span class="nav-icon">📖</span> Kapitel</div>
-    <div class="nav-item" onclick="showTab('today')"><span class="nav-icon">⚡</span> Heute wiederholen <span class="nav-badge" id="todayBadge" style="display:none">0</span></div>
-    <div class="nav-item" onclick="showTab('review')"><span class="nav-icon">🔁</span> Wiederholungsplan</div>
-    <div class="nav-item" onclick="showTab('calendar')"><span class="nav-icon">📅</span> Kalender</div>
-    <div class="nav-section">Karteikarten</div>
-    <div class="nav-item" onclick="showTab('learn')"><span class="nav-icon">🃏</span> Lernen</div>
-    <div class="nav-item" onclick="showTab('cards')"><span class="nav-icon">✏️</span> Verwalten</div>
-    <div class="nav-section">Daten</div>
-    <div class="nav-item" onclick="showTab('export')"><span class="nav-icon">💾</span> Export / Import</div>
-  </nav>
+<nav class="topnav">
+  <div class="nav-logo">Mein Dashboard</div>
+  <div class="nav-tab" id="tab-home" onclick="showPage('home')">🏠 Heute</div>
+  <div class="nav-tab" id="tab-history" onclick="showPage('history')"><span class="nav-dot" style="background:var(--history-mid)"></span>Weltgeschichte</div>
+  <div class="nav-tab" id="tab-sport" onclick="showPage('sport')"><span class="nav-dot" style="background:var(--sport-mid)"></span>Sport</div>
+  <div class="nav-tab" id="tab-lang" onclick="showPage('lang')"><span class="nav-dot" style="background:var(--lang-mid)"></span>Sprachen</div>
+</nav>
 
-  <main class="main">
-    <!-- CHAPTERS -->
-    <div class="tab-panel active" id="tab-chapters">
-      <div class="stat-grid" id="statGrid"></div>
-      <div id="chapterList"></div>
+<!-- ═══════════════════════════════════════════════════════ HOME PAGE -->
+<div class="page" id="page-home">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="home-greeting">Guten Tag!</div>
+      <div class="page-subtitle" id="home-date"></div>
     </div>
+  </div>
 
-    <!-- TODAY -->
-    <div class="tab-panel" id="tab-today">
-      <div class="section-title">Heute fällig</div>
-      <div id="todayList"></div>
+  <!-- STREAK CARDS -->
+  <div class="section-title">Heutige Aktivitäten</div>
+  <div id="homeStreaks"></div>
+
+  <!-- WEEK OVERVIEW -->
+  <div style="margin-top:28px;">
+    <div class="section-title">Diese Woche</div>
+    <div id="homeWeekGrid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ HISTORY PAGE -->
+<div class="page" id="page-history">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="color:var(--history)">Weltgeschichte</div>
+      <div class="page-subtitle">Simon Sebag Montefiore – Die Welt</div>
     </div>
+  </div>
+  <div class="stat-grid" id="h-stats"></div>
 
-    <!-- REVIEW PLAN -->
-    <div class="tab-panel" id="tab-review">
-      <div class="section-title">Wiederholungsplan</div>
-      <div id="reviewList"></div>
+  <!-- SUB TABS -->
+  <div style="display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">
+    <button class="btn btn-sm btn-history" id="hs-chapters" onclick="showHistorySub('chapters')">Kapitel</button>
+    <button class="btn btn-sm" id="hs-today" onclick="showHistorySub('today')">Heute fällig</button>
+    <button class="btn btn-sm" id="hs-review" onclick="showHistorySub('review')">Wiederholungsplan</button>
+  </div>
+
+  <div id="hs-panel-chapters">
+    <div id="chapterList"></div>
+  </div>
+  <div id="hs-panel-today" style="display:none"><div id="todayList"></div></div>
+  <div id="hs-panel-review" style="display:none"><div id="reviewList"></div></div>
+
+  <div style="margin-top:32px;border-top:1px solid var(--border);padding-top:20px;">
+    <div style="font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:12px;">Daten sichern</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-sm" onclick="doExport();document.getElementById('exportOut').scrollIntoView({behavior:'smooth'})">Exportcode generieren</button>
     </div>
-
-    <!-- CALENDAR -->
-    <div class="tab-panel" id="tab-calendar">
-      <div class="section-title">Kalenderansicht</div>
-      <div id="calendarWrap"></div>
+    <div id="exportOut" style="margin-top:10px;"></div>
+    <div style="margin-top:12px;">
+      <textarea class="code-area" id="importIn" placeholder="Exportcode zum Importieren hier einfügen…" style="margin-bottom:8px;min-height:60px;"></textarea>
+      <button class="btn btn-sm" onclick="doImport()">Importieren</button>
     </div>
+  </div>
+</div>
 
-    <!-- LEARN -->
-    <div class="tab-panel" id="tab-learn">
-      <div class="section-title">Karteikarten lernen</div>
-      <div id="learnContent"></div>
+<!-- ═══════════════════════════════════════════════════════ SPORT PAGE -->
+<div class="page" id="page-sport">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="color:var(--sport)">Sport</div>
+      <div class="page-subtitle">Trainingsplan & Streak</div>
     </div>
+    <div id="sportStreakBadge"></div>
+  </div>
+  <div class="stat-grid" id="s-stats"></div>
 
-    <!-- CARDS MANAGE -->
-    <div class="tab-panel" id="tab-cards">
-      <div class="section-title">Karteikarten verwalten</div>
-      <div class="form-card">
-        <label>Frage</label>
-        <input type="text" id="newQ" placeholder="z.B. Wer war Enheduanna?">
-        <label>Antwort</label>
-        <textarea id="newA" placeholder="z.B. Erste namentlich bekannte Dichterin der Geschichte..."></textarea>
-        <label>Kapitel (optional)</label>
-        <select id="newChap"><option value="">– kein Kapitel –</option></select>
-        <button class="btn btn-gold" onclick="addCard()">Karteikarte hinzufügen</button>
+  <div style="display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">
+    <button class="btn btn-sm btn-sport" id="ss-week" onclick="showSportSub('week')">Diese Woche</button>
+    <button class="btn btn-sm" id="ss-log" onclick="showSportSub('log')">Trainingslog</button>
+    <button class="btn btn-sm" id="ss-streak" onclick="showSportSub('streak')">Streak</button>
+  </div>
+
+  <div id="ss-panel-week">
+    <div class="section-title">Wochenplan</div>
+    <div class="week-grid" id="weekGrid"></div>
+    <div class="card" id="todayWorkout"></div>
+  </div>
+  <div id="ss-panel-log" style="display:none">
+    <div class="card" style="margin-bottom:14px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+        <div class="form-row" style="flex:1;min-width:120px;margin-bottom:0;"><label>Art</label><input type="text" id="logType" placeholder="z.B. Laufen, Gym…"></div>
+        <div class="form-row" style="width:90px;margin-bottom:0;"><label>Minuten</label><input type="number" id="logDur" placeholder="45" min="1"></div>
+        <div class="form-row" style="width:130px;margin-bottom:0;"><label>Datum</label><input type="date" id="logDate"></div>
+        <button class="btn btn-sport btn-sm" onclick="addLog()" style="margin-bottom:1px;">Eintragen</button>
       </div>
-      <div class="filter-row">
-        <select id="filterAct" onchange="renderCardList()"><option value="">Alle Akte</option></select>
-      </div>
-      <div class="card-list" id="cardList"></div>
     </div>
+    <div class="section-title">Trainingslog</div>
+    <div id="trainingLog"></div>
+  </div>
+  <div id="ss-panel-streak" style="display:none">
+    <div class="section-title">Letzte 4 Wochen</div>
+    <div id="sportStreakGrid"></div>
+  </div>
+</div>
 
-    <!-- EXPORT -->
-    <div class="tab-panel" id="tab-export">
-      <div class="section-title">Export & Import</div>
-      <div class="export-box">
-        <h3>Fortschritt exportieren</h3>
-        <p>Kopiere den Code unten und speichere ihn in einer Notiz-App. Beim nächsten Mal kannst du ihn wieder importieren.</p>
-        <button class="btn btn-gold" onclick="doExport()">Exportcode generieren</button>
-        <div id="exportOut"></div>
-      </div>
-      <div class="export-box">
-        <h3>Fortschritt importieren</h3>
-        <p>Füge deinen gespeicherten Code hier ein:</p>
-        <textarea class="code-area" id="importIn" placeholder="Exportcode hier einfügen..."></textarea>
-        <button class="btn btn-gold" onclick="doImport()">Importieren</button>
-      </div>
+<!-- ═══════════════════════════════════════════════════════ LANG PAGE -->
+<div class="page" id="page-lang">
+  <div class="page-header">
+    <div>
+      <div class="page-title" style="color:var(--lang)">Sprachen</div>
+      <div class="page-subtitle">Spanisch · Französisch · Schwedisch</div>
     </div>
-  </main>
+  </div>
+
+  <div class="lang-tabs" id="langTabs">
+    <button class="lang-tab active" onclick="showLang('es')">🇪🇸 Spanisch</button>
+    <button class="lang-tab" onclick="showLang('fr')">🇫🇷 Französisch</button>
+    <button class="lang-tab" onclick="showLang('sv')">🇸🇪 Schwedisch</button>
+  </div>
+
+  <div id="langContent"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ EXPORT (hidden page, kept for import/export logic) -->
+<div class="page" id="page-export" style="display:none">
+  <div class="page-title" style="margin-bottom:20px;">Daten & Export</div>
+  <div class="card" style="margin-bottom:14px;">
+    <div class="section-title">Exportieren</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.6;">Kopiere diesen Code und speichere ihn in einer Notiz. Beim Gerätewechsel kannst du ihn wieder importieren.</p>
+    <button class="btn" onclick="doExport()" style="margin-bottom:10px;">Exportcode generieren</button>
+    <div id="exportOut"></div>
+  </div>
+  <div class="card">
+    <div class="section-title">Importieren</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">Exportcode hier einfügen:</p>
+    <textarea class="code-area" id="importIn" placeholder="Exportcode hier einfügen…" style="margin-bottom:10px;"></textarea>
+    <button class="btn" onclick="doImport()">Importieren</button>
+  </div>
 </div>
 
 <script>
+// ══════════════════════════════════ DATA ══════════════════════════════════
+
 const ACTS = [
   { name: "Erster Akt – Von Pharaonen und Akkadern", chapters: ["1.1 Kubaba, die erste Königin","1.2 Die Erbauer der Pyramiden: Cheops und seine Mutter","1.3 Sargon: Der Zerschmetterer von Königen","1.4 Enheduannas Rache","1.5 Seqenenre, der Tapfere","1.6 Hatschepsut: Vornehme Frau und erster Pharao","1.7 Große kleine Herrin Ägyptens: Teje","1.8 Sonnenwahn: Nofretete und der König der Hethiter","1.9 Nofretete und Tutanchamun – Mann, Frau und ein hethitischer Prinz","2.0 Kampf der Wagenlenker","2.1 Kriegsköniginnen: Fu Hao, Puduhepa und Nefertari","2.2 Drei Königinnen: Isebel, Semiramis und Atalja","2.3 Assyrer erobern die Welt","2.4 Kusch: Das erste afrikanische Großreich","2.5 Afrika gegen Assyrien","2.6 Ein trübsinniger König begeht Brudermord","2.7 Das Machtduett von Großmutter und Enkelsohn"] },
-  { name: "Zweiter Akt – Perser, Babylonier und Athener", chapters: ["Nebukadnezar und die Hure Babylon","Vom Eroberer zum Trinkgefäß: Kyros und Tomyris","Dareios, Buddha und das Rad des Gesetzes","Königin Amestris verstümmelt ihre Widersacherin","Perikles, Aspasia und die Pest in Athen","Alkibiades und Sokrates","Persischer Giftwettkampf und makedonische Mundgeruchverschwörung","Der einäugige Philipp und die Königin Olympias","Persisches Roulette: Dareios und Alexander","Alexander, Roxane, Chandragupta: Weltkönig, baktrische Königin, indischer König","Tod in Babylon: Das Morden beginnt","Seleukos in Indien: Der Aufstieg des Chandragupta","Ashoka: Der König, der das Rad dreht","Mit dem Herzen eines Tigers und eines Wolfes: Aufstieg der Qin","Liebe unter Ptolemäern","Afrikanischer Blitz und Menschenopfer: Barkas von Karthago","Für und gegen Karthago: Scipio, Hannibal und Massinissa","Demetrios, König der Inder","Der verrottende Fisch von Qin: Aufstieg des kleinen Gauners","Mütterliches Monster: »Hier ist das menschliche Schwein«","Judas und Mithridates: Judäischer Hammer und parthischer Schuss","Africanus der Jüngere und der König von Numidien: Tod der großen Städte"] },
-  { name: "Dritter Akt – Han und Cäsaren", chapters: ["König Dickbauch, sein Sohn und die Kleopatras","Harmonische Verwandtschaft, Bluthochzeit: Eine Prinzessin unter Nomaden","Der König, der nicht vergiftet werden konnte","Der entmannte Geschichtsschreiber und Kaiser Wu","Kahler Hurenbock und ägyptische Königin: Caesar und Kleopatra","Crassus' Kopf und eine Million tote Gallier","Kleopatra, Caesar und Marcus Antonius","Alexanders Nase und Kleopatras Schlange","Augustus, Julia und die Einäugige von Kusch","Fliegende Schwalbe, die Liebe und ein abgeschnittener Ärmel","Das Reptil von Capri","Wenn Rom nur einen Hals hätte: Caligula und seine Schwestern","Messalinas Putsch","Herrschaft der Freigelassenen: Agrippinas Hochzeit","Mütter, Brüder und Schwestern: Nero, Agrippina und die Bans","Begabte Geschwister: Zwei Schriftgelehrte und ein Feldherr","Sternenkriege, durchstochene Penisse, Sexsklaven und Dampfbäder","Der verliebte Hadrian: Tod im Nil","Die Eunuchen, der kaiserliche Philosoph und die Pandemie","Das Monster des Philosophen: Commodus","Eunuchenmord und Größenwahn","Elagabals Verwandlung: Afrikanischer Kaiser und arabische Kaiserinnen","Der Schah und der ausgestopfte Kaiser","Zenobia und Konstantin"] },
+  { name: "Zweiter Akt – Perser, Babylonier und Athener", chapters: ["Nebukadnezar und die Hure Babylon","Vom Eroberer zum Trinkgefäß: Kyros und Tomyris","Dareios, Buddha und das Rad des Gesetzes","Königin Amestris verstümmelt ihre Widersacherin","Perikles, Aspasia und die Pest in Athen","Alkibiades und Sokrates","Persischer Giftwettkampf und makedonische Mundgeruchverschwörung","Der einäugige Philipp und die Königin Olympias","Persisches Roulette: Dareios und Alexander","Alexander, Roxane, Chandragupta","Tod in Babylon: Das Morden beginnt","Seleukos in Indien: Der Aufstieg des Chandragupta","Ashoka: Der König, der das Rad dreht","Mit dem Herzen eines Tigers und eines Wolfes: Aufstieg der Qin","Liebe unter Ptolemäern","Afrikanischer Blitz und Menschenopfer: Barkas von Karthago","Für und gegen Karthago: Scipio, Hannibal und Massinissa","Demetrios, König der Inder","Der verrottende Fisch von Qin","Mütterliches Monster","Judas und Mithridates","Africanus der Jüngere und der König von Numidien"] },
+  { name: "Dritter Akt – Han und Cäsaren", chapters: ["König Dickbauch, sein Sohn und die Kleopatras","Harmonische Verwandtschaft, Bluthochzeit","Der König, der nicht vergiftet werden konnte","Der entmannte Geschichtsschreiber und Kaiser Wu","Caesar und Kleopatra","Crassus' Kopf und eine Million tote Gallier","Kleopatra, Caesar und Marcus Antonius","Alexanders Nase und Kleopatras Schlange","Augustus, Julia und die Einäugige von Kusch","Fliegende Schwalbe, die Liebe und ein abgeschnittener Ärmel","Das Reptil von Capri","Caligula und seine Schwestern","Messalinas Putsch","Herrschaft der Freigelassenen: Agrippinas Hochzeit","Nero, Agrippina und die Bans","Begabte Geschwister: Zwei Schriftgelehrte und ein Feldherr","Sternenkriege, Sexsklaven und Dampfbäder","Der verliebte Hadrian: Tod im Nil","Die Eunuchen, der kaiserliche Philosoph und die Pandemie","Das Monster des Philosophen: Commodus","Eunuchenmord und Größenwahn","Elagabals Verwandlung","Der Schah und der ausgestopfte Kaiser","Zenobia und Konstantin"] },
   { name: "Vierter Akt – Dynastien des Konstantin, Sassan und Speerwerfer-Eule", chapters: ["Der Ehefrauenmörder und der dreizehnte Apostel","Der gekrönte Embryo und der heidnische Kaiser","Erstes Krokodil und der Hunne Rugila","Attila und Kaiserin Placidia","Attilas Bluthochzeit und Justinians Braut","Qusaiy und Justinian: Von Konstantinopel nach Mekka","»Salomo, dich habe ich übertroffen«","Justinians Pandemie und die Mördervögel von Mekka"] },
-  { name: "Fünfter Akt – Mohammeds Dynastie", chapters: ["Familienfehde","»Ein Kaiser, der kräht und bellt«: Justins Wahnsinn","»Lies! Ich kann nicht! Lies!« Mohammeds Offenbarung","Tödlicher Jäger, Löwe des Ostens: Der Größenwahn Chosraus","Taizong und der König von Tibet","Xuanzangs Reisen: Die Öffnung der Indosphäre","»Beschneidet die Männer!« Eroberungen Mohammeds und seiner Familie","Bezaubernde Wu: »Die Kaiserin hat mein Kind ermordet«"] },
-  { name: "Sechster Akt – Die Familien Mohammeds und Karls des Großen", chapters: ["Der arabische Caesar und der Yazid des Weins, der Hurerei und der Affen","Die Zähne und Klauen der Kaiserin Wu Zetian","Der Fliegentöter von Damaskus und die Tang-Kaiserinnen","Der Hammer und die Orgien des Kalifen","Blutvergießer und Riesenbaby: Aufstieg des Abbas und Fall der Tang","Der Falke und die gekrönten Tauben: Abd ar-Rahman und Karl der Große","Tod den Dämonen: Karls Schwert","Karls Kaiserkrönung, Haruns Hochzeit","Tausendundeine Nacht: Der Kalif und die Sängerinnen von Bagdad","»Bring mir Jafars Kopf«","Die Amsel von Córdoba","Rurik und die Wikinger","Konstantinopel und Rom: Pferdeflüsterer und Senatrix","Heidnische Konvertiten: Wladimir und Rollo","Der Kalif von Córdoba","Afrikanische Macht: Die Herren von Wagadu und von Kairo","Al-Misks Düfte, Jawars Fisch und der jüdische Wesir: Die Fatimiden","Der Despot von Kairo, die Herrin des Reiches und der Bulgarentöter","Die Blauzähne erobern England","Die Amerikaner: Freydis und Gefiederte Schlange"] },
-  { name: "Siebter Akt – Song, Fujiwara und Chola", chapters: ["Die kultivierten Staatenlenker der Song: Schießpulver, Papiergeld, Dichtung","Zwei Schriftstellerinnen: Murasaki und die Dichterin","Der wilde Löwe Arslan und die alterslose Zoë","Wilhelm Eisenarm, Schlaukopf Robert und die amazonenhafte Sikelgaita","Die dichtende Prinzessin und der eitle Löwe","Rogers Flatulenz, Zaynabs Magie und El Cids Schwert","Kreuzritter: Der Riese und die Tochter des Kaisers"] },
-  { name: "Achter Akt – Dschingis und Söhne", chapters: ["Der Fall Temüdschins","Tamar, Vorkämpferin des Messias","Temüdschin kommt wieder auf die Beine","Verführer und Rächer: Die Zähne des Andronikos und die Augen des Dogen","Dschingis, goldenes Leben und der Schwarze Tod","Dschingis und Söhne: »Was ist die größte Freude für einen Mann?«","Jayavarman von Angkor und das Wunder der Welt","Dschingis und Friedrich der Staufer: Machtprobe am Sterbebett","Als Frauen die Welt regierten: Sorkhatani und Raziah","Alexander Newski und Möngke Khan: Noch eine Eroberung der Welt","Hülegü und Saadi","Ich wünschte, ich wäre Staub: Der Sklavenkönig und der letzte Hauteville","Kublai und die Polo-Brüder","Der habgierige Rudolf und Marco Milione","Kublais Überfall auf Japan","Die Flucht der Polos und der Historiograph der Il-Khane","Sundiata, der Löwenkönig: Die Mansas von Mali und die Mexica der Inselstadt","Der reichste Mann der Welt: Musa in Kairo","Der zerstörerische Tod: Vier Schriftsteller inmitten des Großen Sterbens"] },
-  { name: "Neunter Akt – Timuriden, Ming und Obas von Benin", chapters: ["Osmanen kommen in Europa an: Zwei Burgen und eine Hochzeit","Kopftürme: Timur und der Dichter Hafis","Timur nimmt Delhi ein: Bayezid in einem Käfig","Kaiser der Welt: Timur in Samarkand","Der Bettelkaiser und seine Foltermethoden","Auf chinesische Art: Der Eunuch-Admiral und Timurs Grab","Massaker unter Konkubinen","Der Leopardenkönig und João der Bastard"] },
-  { name: "Zehnter Akt – Medici und Mexica, Osmanen und Avis", chapters: ["Henrique der Seefahrer: Sklaven, Zucker und Gold","Cosimo und der Piratenpapst: Im Namen Gottes und der guten Geschäfte","Der Fall von Konstantinopel","Die Mexica von Itzcóatl: Menschen, die für ihren Gott sterben","Der Erderschütterer und der Impotente","Das Zweite und Dritte Rom: Cäsar Mehmed und Sophia von Moskau","Ein missglückter Mordanschlag und Auftritt Leonardo da Vinci","Sophias Kreml, Skanderbegs Albanien, Bellinis Porträt","Isabella und Ferdinand: Bezwinger des Islam, Geißel der Juden","Die Manikongos vom Kongo und el Hombre von Portugal","Anacaona, der Admiral und die Königin","Fegefeuer der Eitelkeiten: Papst Alexander VI. und die Kastanienorgie der Borgias","Eine Erzschlafmütze und eine Wahnsinnige","Julius, Michelangelo und Raffael: Zwei Terribili und ein Mann mit Stil","Luther und Leo: Die Exkremente des Teufels und der Elefant des Papstes","Manuels Marodeure im Osten: Da Gama und Albuquerque"] },
-  { name: "Elfter Akt – Timuriden und Mexica, Osmanen und Safawiden", chapters: ["Babur nimmt Delhi ein","Selim: Versunken in Blut","Der Alexander-Jesus von Persien strebt die Weltherrschaft an","Roxelane und Süleyman: Die Freudvolle und der Prächtige","Karl und der Manikongo","Cortés, Malinche und Moctezuma II.","Isabel Moctezuma: Die letzte Kaiserin und der Untergang der Mexica","Le Grand Nez und die Nelkenkaiserin","Der Inka und der Konquistador","Der Mohr, Michelangelo und der Sacco di Roma","Das Jüngste Gericht: Michelangelo in der Sixtina","Süleymans Favoriten: Roxelane und Ibrahim","Morde und Seeschlachten: Die Barbarossa-Brüder und die Piratenkönigin","Habsburger-Brüder und ihre Konquistadoren","Die osmanische Kaiserin, die Glückliche Laus und Doña Gracia","Der umsichtige Herrscher und drei englische Königinnen","»Hoyda, blutrünstige wilde Bestie!«","Blonder Sultan, jüdischer Herzog, serbischer Wesir"] },
-  { name: "Zwölfter Akt – Dahomeys, Stuarts und Villiers, Timuriden und Osmanen", chapters: ["La Serpente: Eine Medici als französische Königin","Philipps geißelnder Sohn und sein draufgängerischer Bruder","Bluthochzeit: Der Bengelkönig, die Krokodilkönigin und der schreckliche Iwan","Sohnesmord: Der König der Hermaphroditen und der Zar von Sibirien","Die Schlacht der toten Könige: Sebastião der Schlafende und Mansur der Goldene König","Bayano, Drake und Diego","Zwei Armadas: Philipp und Hideyoshi","Der verrückte Kaiser von Prag: Rudolf II.","König der Hexen: James in Love, Shakespeare bei Hofe","Zwei Herrscherinnen: Licht der Welt und Schöner Mond","Im freien Fall: Der Prinz der Finsternis und ein kotbeschmierter Kaisersohn","Mord durch Einlauf: Die Favoriten von König James I.","Mord auf Befehl: Kösem, schillernde Regentin des Osmanischen Reichs","Die Smiths, der König der Welt und zwei Künstler","Die Heiligen von Amerika: Cromwell, Warwick und Winthrop","Taj Mahal: Mumtaz' Tochter und Kösems wahnsinniger Sohn","Drei Könige Afrikas: Manikongo Garcia, Nzinga und Ahosu Houegbadja","Neunzehn Gentlemen von Amsterdam und ein Piratenprinz von Neu-Amsterdam","Heilige und Kavaliere: Charles I., Henrietta Maria und Cromwell","Killerkönige: Dachse und Hetmane, Zuckerstückchen und Bogensehnen","Unvergängliche Krone und Prachtvolle Mutter Christi","Eingeweide: Protektor Oliver und Prinz Dick","Ganga Zumba: Der König von Palmares","Die Beherrscher der Welt: Shivaji, Aurangzeb und die Dichterin Zebunnissa"] },
-  { name: "Dreizehnter Akt – Arkwrights und Krupps, Habsburger, Bourbonen und Sansons", chapters: ["»Queen Dick«","Die Wahrnehmung und Ordnung der Wirklichkeit: Velázquez, Bernini und Artemisia","Unterwegs zum Absolutismus: Anna und Mazarin","Sex, Gift und Krieg am Hofe des Sonnenkönigs","Die fröhlichen Brüder und die Afrikakompanie","Minette, Barbara und die Kannibalisierung der de Witts","Kampf um Unabhängigkeit: Der Qing, der Großmogul und der Chhatrapati","Leopold die Unterlippe, »Schießpulver« Sobieski und Königin Cleopatra","Der Wechselbalg, die Unterwäsche des Königs und die Oranier","Titanen auf dem Sterbebett: Carlos II., Alamgir, Louis XIV., Kangxi","Cock Robin, das preußische Monstrum und der polnische Herkules","Der Philosophenprinz, der Philosoph und die Marquise","Wollust, Eroberer, Diamant und Kurtisane: Nader, Rangila, Friedrich","Maria Theresia: Mutter, Kaiserin, Kriegsherrin","Was ist ein Vater? Was ein Sohn? Der Wahn von Nader","Der eisenvernarrte Titan, der König der Kanäle und Moll Hackabout","Sally Hemings und Marie Antoinette: Diamanten und ein Kind der Liebe","Saint-Georges, gefährliche Liebschaften und die Abolitionisten","Requiem: Joseph II. und Mozart","Marie Antoinette, der Scharfrichter und Dr. Guillotin","Revolutionen in Haiti und Paris: Cécile und Toussaint, Robespierre und Danton"] },
-  { name: "Vierzehnter Akt – Bonapartes und Albaner, Wellesleys und Rothschilds", chapters: ["Marie Antoinette, Joséphine und das nationale Rasiermesser","Der Schwarze Spartakus und der Tugendtyrann","Ein Haufen Augäpfel: Tiger Tipu, die Wellesleys und die Rache des Eunuchen","Ägyptische Potentaten: Bonaparte und Mehmed Ali","Zwei Generäle: Toussaint und Napoleon","Ein Kaiser und fünf Königreiche","Könige des Kapitals: Die Rothschilds","Tropische Monarchen: Die Könige von Haiti und Brasilien","Frauen der Eroberer","Kamehameha und Napoleon","Wellesleys, Rothschilds und die Frau auf dem scharlachroten Tier","Arabische Eroberungen: Mehmed Ali und die Sauds","Napoleon, Marie-Louise und Moskau","Waterloo: Das britische Jahrhundert, Napoleon II. und die Rothschilds","Shaka Zulu, Moshoeshoe und Dona Francisca","Reichsgründer in Ostafrika: Mehmed Ali und Said"] },
-  { name: "Fünfzehnter Akt – Braganças und Zulu, Albaner, Dahomeaner und Vanderbilts", chapters: ["Die Befreier: Bolívar und Pedro","Der Große Herr von Paraguay: Das ethnische Experiment des Dr. Francia","Manuela, der Befreier und König Baumwolle","Romantik und moderne Nation: Lord Byrons Abenteuer und Beethovens Neunte","»Erstecht ihr mich, den König der Welt?«: Bolívar und Shaka","Revolution: Pedro und Domitília","Quamina und Sir John Gladstone: Sklavenrebellen, Sklavenhalter","Lord Cupid und die Schirmherrinnen","»Lieber sterben als versklavt leben«: Daddy Sharpe und die Abolition","Kriegerinnen von Dahomey, Kalif von Sokoto und Kommandant Pretorius","Der Napoleon des Ostens: Mehmed Alis Schachzug und die Löwin vom Punjab","Kriegsherren der USA: Jacksons Kugeln und Santa Annas Bein","Zum Pazifik! König von Hawaii, Königin Emma, Commodore Vanderbilt"] },
-  { name: "Sechzehnter Akt – Bonapartes und Mandschu, Habsburger und Komantschen", chapters: ["Revolutionen und Politik für die Massen: Louis Napoleon und Lola Montez","Der Erotomane und Das Kapital: Louis Napoleon und Marx","Glanz und Elend der Kurtisanen","Eliza Lynch und Königin Victoria: Zwei weibliche Potentaten","Rebellion: Die letzten Timuriden und die ersten Nehrus","Verletzend und zerstörerisch: Die Briten holen sich Indien zurück","Hinkender Drache, eisenköpfige Ratte und der Kleine An: Der Aufstieg Cixis","Notfalls den Kaiser verführen: Napoleon III., die Herzdame und das Risorgimento","»Verdreschen wir sie morgen«: Ulysses und Abraham","Cynthia Ann Parker liebt Peta Nocona, Franz Joseph heiratet Sisi","Amerikanische Kriege: Pedro und López, Charlotte Augusta und Eliza","»Wir sind alle Amerikaner«: Lincoln und Grant"] },
-  { name: "Siebzehnter Akt – Hohenzollern und Krupps, Albaner und Lakota", chapters: ["Ein verrückter Junker, ein Kanonenkönig: Wettstreit im modernen Machtgefüge","Ismail der Prächtige und Eugénie: Das Kaiserreich ist ein altes Weib","In der Mausefalle: Das Debakel von Napoleon dem Kleinen","Ku-Klux-Klan und Little Bighorn: Ulysses Grant und Sitting Bull","Der eiserne Kanzler und Dizzy"] },
-  { name: "Achtzehnter Akt – Salomo und Asante, Habsburg und Sachsen-Coburg", chapters: ["Salama, Prinzessin von Sansibar, und ein König, der sich »Leichen« nannte","Ismail und Tewodros: Der Kampf um Ostafrika","Cetshwayos Sieg und der letzte Napoleon","Schlächter Leopold, Henker Peters, irrer Kapitän Voulet","Rudolf und Mary in Mayerling, Inspektor Hiedler und Adolf Hitler in Braunau","Moderne Monarchen: Franz Ferdinand, Pedro, Isabella, Liebchen Wilhelm"] },
-  { name: "Neunzehnter Akt – Hohenzollern, Krupps, Osmanen, Tennos und Songs", chapters: ["Sonnenaufgang im Osten: Kaiserin Cixi, Königin Min und Sun Yat-sen","Königin Lili'uokalani und Teddy Roosevelt","Roosevelt und die Rough Riders","Abd al-Aziz: Die Rückkehr der Sauds","Rhodes, das Maxim und Lobengula","Menelik und Kaiserin Taytu: Afrikanischer Triumph","Gandhi, Churchill und die Sudan-Maschine","Zwei betagte Kaiserinnen: Cixi und Victoria","Du Bois, Washington und Roosevelt","Franklin, Eleanor und Hirohito","Süßer, Harfner, Tutu und Concettina: Wilhelm II. und seine Freunde","Ende oder Wende in Wien? Franz Ferdinand, Freud, Klimt","»Ich will meine Mami«: Kindkaiser, Sun Yat-sen und die Song-Schwestern","Familienhochzeit: König, Kaiser und drei Paschas","Hohenzollern, Habsburger und Haschemiten","»So heißt man also seine Gäste willkommen«: Der Thronfolger in Sarajevo","Ein Gefreiter an der Westfront: Massentötung im Massenzeitalter","Des Kaisers Skrotum und Hindenburg als Diktator","Ein König in Arabien, ein Bolschewik in Petrograd","Der Niedergang der Kaiser","Tiger, Ziegenbock, Jesus Christus","Niemanden hassen, sich niemals fürchten: Gandhi und Nehru","Das Gehirn, der tumbe Holländer und Lucky Luciano","Vorfühlen mit Bajonetten: Die Könige von München, Syrien und Irak"] },
-  { name: "Zwanzigster Akt – Pahlavis und Songs, Roosevelts, Kennedys und die Mafia", chapters: ["Vater der Türken, Licht der Perser und das größte Genie: Atatürk, Reza, Lenin","Die Song-Schwestern: Sun, Chiang und Mao","Jazz und die Roaring Twenties: Roosevelt, Josephine Baker und Lucky Luciano","Rin Tin Tin: Kennedy, Klein-Cäsar und Roosevelt","Der Feldmarschall und der »böhmische Gefreite«","Lange Messer, Großer Terror: Die ultimativen Machtmenschen Hitler und Stalin","Äthiopien mit oder ohne Äthiopier: Haile Selassie und Mussolini","Hirohitos Invasion in China","Ölkönige – Die Eroberung Arabiens: Abd al-Aziz und Reza","»So wird das gemacht« – Hitlers Plan","Der deutsche Diktator und der junge König","Hitlers Vernichtungskrieg und Hirohitos Vabanquespiel","Totale Ausrottung: Hitler und der Holocaust","Moderne Sklavenhalter: Krupp","Hitlers Kampf ums Öl","Mao und die Schauspielerin aus Shanghai","Die Zukunft der Menschheit: Roosevelt, Stalin und Jack Kennedy","Roosevelt und die drei Könige","»Noch können wir gewinnen« – Hirohitos Offensive"] },
-  { name: "Einundzwanzigster Akt – Nehrus, Maos und Suns, Mafiosi, Haschemiten und Albaner", chapters: ["»Das Strahlen von tausend Sonnen«: Truman und das amerikanische Jahrhundert","Das Ende des einzigen Indien: Nehru, Jinnah und die Vizekönigin","Faruk und Abdullah: Zwei Könige teilen Palästina auf","Mao, Jiang Qing und die rote Schwester Song","Tiger Kim und Stalins Stellvertreterkrieg","Meyer Lanskys Hotel Nacional und Fidel Castros gescheiterte Revolution","Nasser und der Schah ergreifen die Macht","Der junge König von Kambodscha","Ein Israeli in Paris","Bergmann trifft Schwimmer: Chruschtschow und Mao","Ausgeweidet in Bagdad: Der Rais und der letzte König des Irak","La Grandeur: de Gaulle und Houphouët","Brennende Speere: Kenyatta, Nkrumah und Barack Obama sen.","Nikita und Jack, Mimi und Marilyn","Der Löwe von Juda und der afrikanische Pimpernell","Ungleiche Brüder und ihre Clans: Die Castros und die Kennedys","Atomwaffen in Kuba: Die Hure des Millionärs und der unmoralische Gangster","Sihanouk und der Schah","Nach Kennedy: Lyndon B. Johnson und Martin Luther King"] },
-  { name: "Zweiundzwanzigster Akt – Jelzins, Nehruvianer und Assads, Bin Ladens, Kims und Obamas", chapters: ["Haschemiten und Kennedys, Maos, Nehrus und Assads","Ljonja, die Ballerina: Breschnew an der Macht","Stich des Skorpions und Sturz der Kleinen Kanone: Mao lässt Jiang Qing los","Nasser und der König: Sechstagekrieg im Juni","Die Attentate: Robert F. Kennedy, Martin Luther King, Tom Mboya","Das Aphrodisiakum der Macht: Kissingers und Nixons Dreiecksspiel","Die Ermordung von B-52: Mao und Pol Pot","Die »blöde Puppe«: Indira beherrscht Indien","Der amerikanische Metternich und der Philosophenkönig von China: Kissinger und Mao","Wilde Bestien und Löwen: Die Assads von Damaskus","Kaiserliche Pfaue: Das satanische Fest und der Engel","»Ist König David zurückgetreten?« Der Neguse Negest und Major Mengistu","Mao, Bruder Nr. 1 und die Viererbande","Der Kreuzzügler und der Prinz: Europäische Tyrannen und Demokraten","Indira Gandhi und Sohn","Kleine Kanone, die Acht Unsterblichen und die Bande des Skorpions","Castros Afrika","Der Herr der Spione: Andropow und sein Schützling Gorbatschow","Der Imam, der Schah und Saddam","Jerry John Rawlings von Ghana und Sadat in Jerusalem","Operation Storm-333 in Kabul","Poppy, Osama und W: Bin Laden und die beiden Bushs","Maggie und Indira","Die Nehruvianer: Die dritte Generation","Aufstieg und Fall von Weltmächten: Deng und Gorbatschow","Der Fall der Mauer und das neue Afrika: Jelzin und Mandela","Die Familia: Boris, Tatjana und die Oligarchen","Die Ritter von Damaskus, marxistische Monsterfilme und die Datenkönige","Der Sturz der Türme, die Finanzkrise und »Yes we can«","Baschar, das Bajonett und die Mona Lisa von Indien: Gaddafi und Mubarak gehen unter, Modi kommt","Wo Löwen und Geparden lauern: Trump kapert die Bühne","Die Tötung von Geronimo: Osama wird liquidiert"] },
-  { name: "Dreiundzwanzigster Akt – Trumps und Xis, Sauds, Assads und Kims", chapters: ["Das Kalifat und die Krim","Die Familien, die Dynasten, die Weltreiche","Ein Kaiser, ein Zar und ein Schauspieler: Xi, Putin und Selenskyj"] }
+  { name: "Fünfter Akt – Mohammeds Dynastie", chapters: ["Familienfehde","Justins Wahnsinn","Mohammeds Offenbarung","Tödlicher Jäger, Löwe des Ostens: Der Größenwahn Chosraus","Taizong und der König von Tibet","Xuanzangs Reisen: Die Öffnung der Indosphäre","Eroberungen Mohammeds und seiner Familie","Bezaubernde Wu: »Die Kaiserin hat mein Kind ermordet«"] },
+  { name: "Sechster Akt – Die Familien Mohammeds und Karls des Großen", chapters: ["Der arabische Caesar und der Yazid des Weins","Die Zähne und Klauen der Kaiserin Wu Zetian","Der Fliegentöter von Damaskus und die Tang-Kaiserinnen","Der Hammer und die Orgien des Kalifen","Blutvergießer und Riesenbaby: Aufstieg des Abbas und Fall der Tang","Der Falke und die gekrönten Tauben: Abd ar-Rahman und Karl der Große","Tod den Dämonen: Karls Schwert","Karls Kaiserkrönung, Haruns Hochzeit","Tausendundeine Nacht: Der Kalif und die Sängerinnen von Bagdad","»Bring mir Jafars Kopf«","Die Amsel von Córdoba","Rurik und die Wikinger","Konstantinopel und Rom","Heidnische Konvertiten: Wladimir und Rollo","Der Kalif von Córdoba","Afrikanische Macht: Die Herren von Wagadu und von Kairo","Die Fatimiden","Der Despot von Kairo und der Bulgarentöter","Die Blauzähne erobern England","Die Amerikaner: Freydis und Gefiederte Schlange"] },
+  { name: "Siebter Akt – Song, Fujiwara und Chola", chapters: ["Die kultivierten Staatenlenker der Song","Zwei Schriftstellerinnen: Murasaki und die Dichterin","Der wilde Löwe Arslan und die alterslose Zoë","Wilhelm Eisenarm, Schlaukopf Robert und die amazonenhafte Sikelgaita","Die dichtende Prinzessin und der eitle Löwe","Rogers Flatulenz, Zaynabs Magie und El Cids Schwert","Kreuzritter: Der Riese und die Tochter des Kaisers"] },
+  { name: "Achter Akt – Dschingis und Söhne", chapters: ["Der Fall Temüdschins","Tamar, Vorkämpferin des Messias","Temüdschin kommt wieder auf die Beine","Verführer und Rächer","Dschingis, goldenes Leben und der Schwarze Tod","Dschingis und Söhne","Jayavarman von Angkor und das Wunder der Welt","Dschingis und Friedrich der Staufer","Als Frauen die Welt regierten: Sorkhatani und Raziah","Alexander Newski und Möngke Khan","Hülegü und Saadi","Der Sklavenkönig und der letzte Hauteville","Kublai und die Polo-Brüder","Der habgierige Rudolf und Marco Milione","Kublais Überfall auf Japan","Die Flucht der Polos","Sundiata, der Löwenkönig","Der reichste Mann der Welt: Musa in Kairo","Der zerstörerische Tod: Vier Schriftsteller inmitten des Großen Sterbens"] },
+  { name: "Neunter Akt – Timuriden, Ming und Obas von Benin", chapters: ["Osmanen kommen in Europa an","Kopftürme: Timur und der Dichter Hafis","Timur nimmt Delhi ein: Bayezid in einem Käfig","Kaiser der Welt: Timur in Samarkand","Der Bettelkaiser und seine Foltermethoden","Der Eunuch-Admiral und Timurs Grab","Massaker unter Konkubinen","Der Leopardenkönig und João der Bastard"] },
+  { name: "Zehnter Akt – Medici und Mexica, Osmanen und Avis", chapters: ["Henrique der Seefahrer: Sklaven, Zucker und Gold","Cosimo und der Piratenpapst","Der Fall von Konstantinopel","Die Mexica von Itzcóatl","Der Erderschütterer und der Impotente","Das Zweite und Dritte Rom: Cäsar Mehmed und Sophia von Moskau","Ein missglückter Mordanschlag und Auftritt Leonardo da Vinci","Sophias Kreml, Skanderbegs Albanien, Bellinis Porträt","Isabella und Ferdinand","Die Manikongos vom Kongo","Anacaona, der Admiral und die Königin","Fegefeuer der Eitelkeiten: Papst Alexander VI. und die Borgias","Eine Erzschlafmütze und eine Wahnsinnige","Julius, Michelangelo und Raffael","Luther und Leo","Manuels Marodeure im Osten: Da Gama und Albuquerque"] },
+  { name: "Elfter Akt – Timuriden und Mexica, Osmanen und Safawiden", chapters: ["Babur nimmt Delhi ein","Selim: Versunken in Blut","Der Alexander-Jesus von Persien strebt die Weltherrschaft an","Roxelane und Süleyman","Karl und der Manikongo","Cortés, Malinche und Moctezuma II.","Isabel Moctezuma: Die letzte Kaiserin","Le Grand Nez und die Nelkenkaiserin","Der Inka und der Konquistador","Der Mohr, Michelangelo und der Sacco di Roma","Das Jüngste Gericht: Michelangelo in der Sixtina","Süleymans Favoriten: Roxelane und Ibrahim","Morde und Seeschlachten: Die Barbarossa-Brüder","Habsburger-Brüder und ihre Konquistadoren","Die osmanische Kaiserin und Doña Gracia","Der umsichtige Herrscher und drei englische Königinnen","»Hoyda, blutrünstige wilde Bestie!«","Blonder Sultan, jüdischer Herzog, serbischer Wesir"] },
+  { name: "Zwölfter Akt – Dahomeys, Stuarts und Villiers", chapters: ["La Serpente: Eine Medici als französische Königin","Philipps geißelnder Sohn und sein draufgängerischer Bruder","Bluthochzeit: Der schreckliche Iwan","Sohnesmord: Der König der Hermaphroditen","Die Schlacht der toten Könige","Bayano, Drake und Diego","Zwei Armadas: Philipp und Hideyoshi","Der verrückte Kaiser von Prag: Rudolf II.","König der Hexen: James in Love, Shakespeare bei Hofe","Zwei Herrscherinnen: Licht der Welt und Schöner Mond","Im freien Fall: Der Prinz der Finsternis","Mord durch Einlauf: Die Favoriten von König James I.","Mord auf Befehl: Kösem","Die Smiths, der König der Welt und zwei Künstler","Die Heiligen von Amerika: Cromwell, Warwick und Winthrop","Taj Mahal: Mumtaz' Tochter","Drei Könige Afrikas","Neunzehn Gentlemen von Amsterdam","Heilige und Kavaliere: Charles I., Henrietta Maria und Cromwell","Killerkönige: Dachse und Hetmane","Unvergängliche Krone und Prachtvolle Mutter Christi","Eingeweide: Protektor Oliver und Prinz Dick","Ganga Zumba: Der König von Palmares","Die Beherrscher der Welt: Shivaji, Aurangzeb und die Dichterin Zebunnissa"] },
+  { name: "Dreizehnter Akt – Arkwrights und Krupps", chapters: ["»Queen Dick«","Velázquez, Bernini und Artemisia","Unterwegs zum Absolutismus: Anna und Mazarin","Sex, Gift und Krieg am Hofe des Sonnenkönigs","Die fröhlichen Brüder und die Afrikakompanie","Minette, Barbara und die Kannibalisierung der de Witts","Kampf um Unabhängigkeit: Der Qing, der Großmogul und der Chhatrapati","Leopold die Unterlippe, »Schießpulver« Sobieski und Königin Cleopatra","Der Wechselbalg, die Unterwäsche des Königs und die Oranier","Titanen auf dem Sterbebett: Carlos II., Louis XIV., Kangxi","Cock Robin, das preußische Monstrum und der polnische Herkules","Der Philosophenprinz, der Philosoph und die Marquise","Nader, Rangila, Friedrich","Maria Theresia: Mutter, Kaiserin, Kriegsherrin","Was ist ein Vater? Was ein Sohn? Der Wahn von Nader","Der eisenvernarrte Titan, der König der Kanäle und Moll Hackabout","Sally Hemings und Marie Antoinette","Saint-Georges, gefährliche Liebschaften und die Abolitionisten","Requiem: Joseph II. und Mozart","Marie Antoinette, der Scharfrichter und Dr. Guillotin","Revolutionen in Haiti und Paris"] },
+  { name: "Vierzehnter Akt – Bonapartes und Rothschilds", chapters: ["Marie Antoinette, Joséphine und das nationale Rasiermesser","Der Schwarze Spartakus und der Tugendtyrann","Tiger Tipu, die Wellesleys und die Rache des Eunuchen","Ägyptische Potentaten: Bonaparte und Mehmed Ali","Zwei Generäle: Toussaint und Napoleon","Ein Kaiser und fünf Königreiche","Könige des Kapitals: Die Rothschilds","Tropische Monarchen: Die Könige von Haiti und Brasilien","Frauen der Eroberer","Kamehameha und Napoleon","Wellesleys, Rothschilds und die Frau auf dem scharlachroten Tier","Arabische Eroberungen: Mehmed Ali und die Sauds","Napoleon, Marie-Louise und Moskau","Waterloo und die Rothschilds","Shaka Zulu, Moshoeshoe und Dona Francisca","Reichsgründer in Ostafrika: Mehmed Ali und Said"] },
+  { name: "Fünfzehnter Akt – Braganças und Zulu", chapters: ["Die Befreier: Bolívar und Pedro","Der Große Herr von Paraguay","Manuela, der Befreier und König Baumwolle","Romantik und moderne Nation: Lord Byron und Beethovens Neunte","Bolívar und Shaka","Revolution: Pedro und Domitília","Quamina und Sir John Gladstone","Lord Cupid und die Schirmherrinnen","Daddy Sharpe und die Abolition","Kriegerinnen von Dahomey, Kalif von Sokoto","Der Napoleon des Ostens: Mehmed Alis Schachzug","Kriegsherren der USA: Jacksons Kugeln und Santa Annas Bein","Zum Pazifik! König von Hawaii, Königin Emma, Commodore Vanderbilt"] },
+  { name: "Sechzehnter Akt – Bonapartes und Mandschu", chapters: ["Louis Napoleon und Lola Montez","Der Erotomane und Das Kapital: Louis Napoleon und Marx","Glanz und Elend der Kurtisanen","Eliza Lynch und Königin Victoria","Rebellion: Die letzten Timuriden und die ersten Nehrus","Die Briten holen sich Indien zurück","Der Aufstieg Cixis","Napoleon III., die Herzdame und das Risorgimento","Ulysses und Abraham","Cynthia Ann Parker liebt Peta Nocona, Franz Joseph heiratet Sisi","Amerikanische Kriege: Pedro und López","Lincoln und Grant"] },
+  { name: "Siebzehnter Akt – Hohenzollern und Krupps", chapters: ["Ein verrückter Junker, ein Kanonenkönig","Ismail der Prächtige und Eugénie","Das Debakel von Napoleon dem Kleinen","Ku-Klux-Klan und Little Bighorn: Ulysses Grant und Sitting Bull","Der eiserne Kanzler und Dizzy"] },
+  { name: "Achtzehnter Akt – Salomo und Asante", chapters: ["Salama, Prinzessin von Sansibar","Ismail und Tewodros: Der Kampf um Ostafrika","Cetshwayos Sieg und der letzte Napoleon","Schlächter Leopold, Henker Peters, irrer Kapitän Voulet","Rudolf und Mary in Mayerling und Adolf Hitler in Braunau","Moderne Monarchen: Franz Ferdinand, Pedro, Isabella"] },
+  { name: "Neunzehnter Akt – Hohenzollern, Krupps, Osmanen, Tennos", chapters: ["Sonnenaufgang im Osten: Kaiserin Cixi, Königin Min und Sun Yat-sen","Königin Lili'uokalani und Teddy Roosevelt","Roosevelt und die Rough Riders","Abd al-Aziz: Die Rückkehr der Sauds","Rhodes, das Maxim und Lobengula","Menelik und Kaiserin Taytu: Afrikanischer Triumph","Gandhi, Churchill und die Sudan-Maschine","Zwei betagte Kaiserinnen: Cixi und Victoria","Du Bois, Washington und Roosevelt","Franklin, Eleanor und Hirohito","Wilhelm II. und seine Freunde","Franz Ferdinand, Freud, Klimt","Kindkaiser, Sun Yat-sen und die Song-Schwestern","Familienhochzeit: König, Kaiser und drei Paschas","Hohenzollern, Habsburger und Haschemiten","Der Thronfolger in Sarajevo","Ein Gefreiter an der Westfront","Des Kaisers Skrotum und Hindenburg als Diktator","Ein König in Arabien, ein Bolschewik in Petrograd","Der Niedergang der Kaiser","Tiger, Ziegenbock, Jesus Christus","Gandhi und Nehru","Das Gehirn, der tumbe Holländer und Lucky Luciano","Die Könige von München, Syrien und Irak"] },
+  { name: "Zwanzigster Akt – Pahlavis und Songs", chapters: ["Atatürk, Reza, Lenin","Die Song-Schwestern: Sun, Chiang und Mao","Jazz und die Roaring Twenties","Rin Tin Tin: Kennedy, Klein-Cäsar und Roosevelt","Der Feldmarschall und der »böhmische Gefreite«","Hitler und Stalin","Äthiopien mit oder ohne Äthiopier: Haile Selassie und Mussolini","Hirohitos Invasion in China","Ölkönige – Die Eroberung Arabiens: Abd al-Aziz und Reza","Hitlers Plan","Der deutsche Diktator und der junge König","Hitlers Vernichtungskrieg und Hirohitos Vabanquespiel","Totale Ausrottung: Hitler und der Holocaust","Moderne Sklavenhalter: Krupp","Hitlers Kampf ums Öl","Mao und die Schauspielerin aus Shanghai","Die Zukunft der Menschheit: Roosevelt, Stalin und Jack Kennedy","Roosevelt und die drei Könige","Hirohitos Offensive"] },
+  { name: "Einundzwanzigster Akt – Nehrus, Maos und Suns", chapters: ["Truman und das amerikanische Jahrhundert","Das Ende des einzigen Indien","Faruk und Abdullah: Zwei Könige teilen Palästina auf","Mao, Jiang Qing und die rote Schwester Song","Tiger Kim und Stalins Stellvertreterkrieg","Meyer Lanskys Hotel Nacional und Fidel Castros Revolution","Nasser und der Schah ergreifen die Macht","Der junge König von Kambodscha","Ein Israeli in Paris","Chruschtschow und Mao","Ausgeweidet in Bagdad","de Gaulle und Houphouët","Kenyatta, Nkrumah und Barack Obama sen.","Nikita und Jack, Mimi und Marilyn","Der Löwe von Juda und der afrikanische Pimpernell","Die Castros und die Kennedys","Atomwaffen in Kuba","Sihanouk und der Schah","Nach Kennedy: Lyndon B. Johnson und Martin Luther King"] },
+  { name: "Zweiundzwanzigster Akt – Jelzins, Nehruvianer und Assads", chapters: ["Haschemiten und Kennedys, Maos, Nehrus und Assads","Breschnew an der Macht","Mao lässt Jiang Qing los","Sechstagekrieg im Juni","Die Attentate: Robert F. Kennedy, Martin Luther King, Tom Mboya","Kissingers und Nixons Dreiecksspiel","Mao und Pol Pot","Indira beherrscht Indien","Kissinger und Mao","Die Assads von Damaskus","Das satanische Fest und der Engel","Der Neguse Negest und Major Mengistu","Mao, Bruder Nr. 1 und die Viererbande","Europäische Tyrannen und Demokraten","Indira Gandhi und Sohn","Kleine Kanone, die Acht Unsterblichen und die Bande des Skorpions","Castros Afrika","Andropow und sein Schützling Gorbatschow","Der Imam, der Schah und Saddam","Jerry John Rawlings von Ghana und Sadat in Jerusalem","Operation Storm-333 in Kabul","Bin Laden und die beiden Bushs","Maggie und Indira","Die Nehruvianer: Die dritte Generation","Deng und Gorbatschow","Der Fall der Mauer und das neue Afrika: Jelzin und Mandela","Die Familia: Boris, Tatjana und die Oligarchen","Die Ritter von Damaskus und die Datenkönige","Der Sturz der Türme, die Finanzkrise und Yes we can","Gaddafi und Mubarak gehen unter, Modi kommt","Trump kapert die Bühne","Osama wird liquidiert"] },
+  { name: "Dreiundzwanzigster Akt – Trumps und Xis", chapters: ["Das Kalifat und die Krim","Die Familien, die Dynasten, die Weltreiche","Ein Kaiser, ein Zar und ein Schauspieler: Xi, Putin und Selenskyj"] }
 ];
 
-const SR_INTERVALS = [1, 3, 7, 14, 30]; // Spaced Repetition days
-const DONE_INIT = 31;
-const START_OFFSET_DAYS = 42; // ~6 weeks ago
+const SR = [1, 3, 7, 14, 30];
+const TRAIN_PLAN = {
+  1: { name: 'Montag', exercise: 'Burpees + Klimmzüge', type: 'kraft' },
+  2: { name: 'Dienstag', exercise: 'Intervallläufe', type: 'ausdauer' },
+  3: { name: 'Mittwoch', exercise: 'Mobility', type: 'mobility' },
+  4: { name: 'Donnerstag', exercise: 'Liegestütze + Klimmzüge', type: 'kraft' },
+  5: { name: 'Freitag', exercise: 'Recovery Run', type: 'ausdauer' },
+  6: { name: 'Samstag', exercise: 'Restday / Dehnen', type: 'rest' },
+  0: { name: 'Sonntag', exercise: 'Long Run', type: 'ausdauer' },
+};
+const LANGS = {
+  es: { name: 'Spanisch', flag: '🇪🇸' },
+  fr: { name: 'Französisch', flag: '🇫🇷' },
+  sv: { name: 'Schwedisch', flag: '🇸🇪' },
+};
 
-let chapFlat = [], done = [], reviews = {}, cards = [], learnIdx = 0, learnFlipped = false;
+let chapFlat = [], state = {};
+let hLearnIdx = 0, hFlipped = false, curLang = 'es';
 
 function buildFlat() {
   ACTS.forEach((act, ai) => act.chapters.forEach((ch, ci) => chapFlat.push({ act: ai, chap: ci, title: ch, actName: act.name })));
 }
 
-function todayStr() {
-  return new Date().toISOString().slice(0,10);
-}
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function addDays(ds, n) { const d = new Date(ds); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+function daysBetween(a, b) { return Math.round((new Date(b)-new Date(a))/86400000); }
+function todayDow() { return new Date().getDay(); } // 0=Sun
 
-function addDays(dateStr, n) {
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() + n);
-  return d.toISOString().slice(0,10);
-}
-
-function daysBetween(a, b) {
-  return Math.round((new Date(b) - new Date(a)) / 86400000);
+function defaultState() {
+  const s = {
+    done: [], reviews: {}, hCards: [],
+    sportLog: [], sportDone: {},
+    histStreak: {},
+    langStreak: { es: {}, fr: {}, sv: {} },
+    langCards: { es: [], fr: [], sv: [] },
+    langMinutes: { es: {}, fr: {}, sv: {} },
+  };
+  const today = new Date();
+  for (let i = 0; i < 31; i++) {
+    s.done.push(i);
+    const d = new Date(today); d.setDate(today.getDate() - 42 + i);
+    const ds = d.toISOString().slice(0,10);
+    s.reviews[i] = { doneDate: ds, rounds: [] };
+    const elapsed = daysBetween(ds, todayStr());
+    let rd = 0;
+    for (let r = 0; r < SR.length; r++) { if (elapsed >= SR[r]) rd = r+1; }
+    s.reviews[i].rounds = Array(rd).fill(true);
+  }
+  return s;
 }
 
 function loadState() {
   try {
-    const raw = localStorage.getItem('weltgeschichte_v1');
+    const raw = localStorage.getItem('dashboard_v2');
     if (raw) {
-      const s = JSON.parse(raw);
-      done = s.done || [];
-      reviews = s.reviews || {};
-      cards = s.cards || [];
+      state = JSON.parse(raw);
+      if (!state.histStreak) state.histStreak = {};
+      if (!state.langStreak) state.langStreak = { es:{}, fr:{}, sv:{} };
       return;
     }
   } catch(e) {}
-  // Default: first 31 done, backfill dates
-  const today = new Date();
-  for (let i = 0; i < DONE_INIT; i++) {
-    done.push(i);
-    const chapDate = new Date(today);
-    chapDate.setDate(today.getDate() - START_OFFSET_DAYS + i);
-    const ds = chapDate.toISOString().slice(0,10);
-    reviews[i] = { doneDate: ds, rounds: [] };
-    // Simulate some rounds already done based on elapsed time
-    const elapsed = daysBetween(ds, todayStr());
-    let roundsDone = 0;
-    for (let r = 0; r < SR_INTERVALS.length; r++) {
-      if (elapsed >= SR_INTERVALS[r]) roundsDone = r + 1;
-    }
-    reviews[i].rounds = Array(roundsDone).fill(true);
-  }
+  state = defaultState();
   saveState();
 }
 
 function saveState() {
-  localStorage.setItem('weltgeschichte_v1', JSON.stringify({ done, reviews, cards }));
+  localStorage.setItem('dashboard_v2', JSON.stringify(state));
 }
 
+// ══════════════════════════════════ HISTORY ══════════════════════════════════
+
 function getNextIdx() {
-  for (let i = 0; i < chapFlat.length; i++) if (!done.includes(i)) return i;
+  for (let i = 0; i < chapFlat.length; i++) if (!state.done.includes(i)) return i;
   return -1;
 }
 
-function getNextReviewDate(idx) {
-  if (!reviews[idx]) return null;
-  const r = reviews[idx];
-  const round = r.rounds.length;
-  if (round >= SR_INTERVALS.length) return null;
-  return addDays(r.doneDate, SR_INTERVALS[round]);
+function getNextReview(idx) {
+  if (!state.reviews[idx]) return null;
+  const r = state.reviews[idx];
+  if (r.rounds.length >= SR.length) return null;
+  return addDays(r.doneDate, SR[r.rounds.length]);
 }
 
 function isDueToday(idx) {
-  const next = getNextReviewDate(idx);
-  if (!next) return false;
-  return next <= todayStr();
+  const n = getNextReview(idx); return n ? n <= todayStr() : false;
 }
 
-function updateProgress() {
-  const pct = Math.round(done.length / chapFlat.length * 100);
-  document.getElementById('progFill').style.width = pct + '%';
-  document.getElementById('progText').textContent = done.length + ' / ' + chapFlat.length;
-}
-
-function updateTodayBadge() {
-  const count = done.filter(i => isDueToday(i)).length;
-  const b = document.getElementById('todayBadge');
-  b.textContent = count;
-  b.style.display = count > 0 ? '' : 'none';
-}
-
-function renderStats() {
-  const dueToday = done.filter(i => isDueToday(i)).length;
-  const completed = done.length;
-  const remaining = chapFlat.length - done.length;
-  const weeksLeft = Math.ceil(remaining / 5);
-  document.getElementById('statGrid').innerHTML = `
-    <div class="stat-card"><div class="stat-label">Abgeschlossen</div><div class="stat-value">${completed}</div><div class="stat-sub">von ${chapFlat.length} Kapiteln</div></div>
-    <div class="stat-card"><div class="stat-label">Heute fällig</div><div class="stat-value" style="color:${dueToday>0?'#e07060':'var(--gold-light)'}">${dueToday}</div><div class="stat-sub">Wiederholungen</div></div>
-    <div class="stat-card"><div class="stat-label">Verbleibend</div><div class="stat-value">${remaining}</div><div class="stat-sub">Kapitel</div></div>
-    <div class="stat-card"><div class="stat-label">Fertig in ca.</div><div class="stat-value">${weeksLeft}</div><div class="stat-sub">Wochen (5×/Woche)</div></div>`;
+function renderHStats() {
+  const due = state.done.filter(i => isDueToday(i)).length;
+  document.getElementById('h-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Abgeschlossen</div><div class="stat-value" style="color:var(--history-mid)">${state.done.length}</div><div class="stat-sub">von ${chapFlat.length} Kapiteln</div></div>
+    <div class="stat-card"><div class="stat-label">Heute fällig</div><div class="stat-value" style="color:${due>0?'var(--red)':'var(--history-mid)'}">${due}</div><div class="stat-sub">Wiederholungen</div></div>
+    <div class="stat-card"><div class="stat-label">Verbleibend</div><div class="stat-value" style="color:var(--history-mid)">${chapFlat.length-state.done.length}</div><div class="stat-sub">Kapitel</div></div>
+    <div class="stat-card"><div class="stat-label">Fertig in ca.</div><div class="stat-value" style="color:var(--history-mid)">${Math.ceil((chapFlat.length-state.done.length)/5)}</div><div class="stat-sub">Wochen (5×/Woche)</div></div>`;
 }
 
 function renderChapters() {
-  const nextIdx = getNextIdx();
-  let html = '', gIdx = 0;
+  const next = getNextIdx();
+  let html = '', gi = 0;
   ACTS.forEach((act, ai) => {
-    const actDone = act.chapters.filter((_, ci) => done.includes(gIdx + ci)).length;
-    const isOpen = actDone > 0 && actDone < act.chapters.length;
-    html += `<div class="act-group${isOpen?' open':''}" id="act-${ai}">
-      <div class="act-header" onclick="toggleAct(${ai})">
-        <span class="act-title">${act.name}</span>
-        <span class="act-progress">${actDone}/${act.chapters.length}</span>
+    const done = act.chapters.filter((_,ci) => state.done.includes(gi+ci)).length;
+    const open = done > 0 && done < act.chapters.length;
+    html += `<div class="act-group${open?' open':''}" id="act-${ai}">
+      <div class="act-hdr" onclick="toggleAct(${ai})">
+        <span class="act-hdr-title">${act.name}</span>
+        <span class="act-hdr-prog">${done}/${act.chapters.length}</span>
         <span class="act-chevron">▶</span>
       </div>
       <div class="act-chapters">`;
     act.chapters.forEach((ch, ci) => {
-      const idx = gIdx + ci;
-      const isDoneC = done.includes(idx);
-      const isNext = idx === nextIdx;
-      const due = isDoneC ? getNextReviewDate(idx) : null;
-      const dueToday = isDoneC && isDueToday(idx);
+      const idx = gi+ci, isDone = state.done.includes(idx), isNext = idx===next;
+      const due = isDone ? getNextReview(idx) : null;
+      const dueNow = isDone && isDueToday(idx);
       let badge = '';
-      if (isNext) badge = '<span class="next-badge">als nächstes</span>';
-      else if (isDoneC && due === null) badge = '<span class="due-badge due-done">✓ gelernt</span>';
-      else if (dueToday) badge = '<span class="due-badge due-today">Heute wiederholen</span>';
-      else if (isDoneC && due) {
-        const daysUntil = daysBetween(todayStr(), due);
-        if (daysUntil <= 3) badge = `<span class="due-badge due-soon">in ${daysUntil}d</span>`;
+      if (isNext) badge = '<span class="badge" style="background:var(--history-dim);color:var(--history);border-color:rgba(140,90,0,.2)">als nächstes</span>';
+      else if (isDone && due===null) badge = '<span class="badge badge-ok">✓ gelernt</span>';
+      else if (dueNow) badge = '<span class="badge badge-due">Heute wiederholen</span>';
+      else if (isDone && due) {
+        const days = daysBetween(todayStr(), due);
+        if (days <= 3) badge = `<span class="badge badge-soon">in ${days}d</span>`;
       }
-      html += `<div class="chap-row${isDoneC?' done':''}${isNext?' next-up':''}" onclick="toggleDone(${idx})">
-        <div class="chap-cb${isDoneC?' checked':''}"><span class="chap-check">✓</span></div>
-        <span class="chap-title">${ch}</span>
-        ${badge}
+      html += `<div class="chap-row${isDone?' done-ch':''}${isNext?' next-ch':''}" onclick="toggleDone(${idx})">
+        <div class="chap-cb${isDone?' checked':''}"><span class="chap-check">✓</span></div>
+        <span class="chap-title">${ch}</span>${badge}
       </div>`;
     });
     html += `</div></div>`;
-    gIdx += act.chapters.length;
+    gi += act.chapters.length;
   });
   document.getElementById('chapterList').innerHTML = html;
-  updateProgress();
-  renderStats();
-  updateTodayBadge();
 }
 
-function toggleAct(ai) {
-  document.getElementById('act-'+ai).classList.toggle('open');
-}
+function toggleAct(ai) { document.getElementById('act-'+ai).classList.toggle('open'); }
 
 function toggleDone(idx) {
-  const pos = done.indexOf(idx);
-  if (pos >= 0) {
-    done.splice(pos, 1);
-    delete reviews[idx];
-  } else {
-    done.push(idx);
-    reviews[idx] = { doneDate: todayStr(), rounds: [] };
-  }
-  saveState();
-  renderChapters();
-  if (document.getElementById('tab-today').classList.contains('active')) renderToday();
-  if (document.getElementById('tab-review').classList.contains('active')) renderReview();
-}
-
-function markReviewDone(idx) {
-  if (!reviews[idx]) return;
-  reviews[idx].rounds.push(true);
-  saveState();
-  renderChapters();
-  renderToday();
-  showToast('Wiederholung abgehakt!');
+  const pos = state.done.indexOf(idx);
+  if (pos >= 0) { state.done.splice(pos,1); delete state.reviews[idx]; }
+  else { state.done.push(idx); state.reviews[idx] = { doneDate: todayStr(), rounds: [] }; }
+  saveState(); renderChapters(); renderHStats();
 }
 
 function renderToday() {
-  const due = done.filter(i => isDueToday(i));
-  if (!due.length) {
-    document.getElementById('todayList').innerHTML = '<div class="empty-state">Keine Wiederholungen heute fällig. 🎉<br>Genieß den freien Tag!</div>';
-    return;
-  }
-  document.getElementById('todayList').innerHTML = due.map(idx => {
-    const c = chapFlat[idx];
-    const r = reviews[idx];
-    const round = r.rounds.length;
-    return `<div class="review-item urgent">
-      <div class="review-date-block"><div class="review-day" style="font-size:14px;color:var(--red)">Heute</div><div class="review-month">fällig</div></div>
-      <div class="review-info">
-        <div class="review-chap">${c.title}</div>
-        <div class="review-meta">${c.actName} · Runde ${round+1} von ${SR_INTERVALS.length}</div>
-        <div class="review-rounds">${SR_INTERVALS.map((_,i) => `<div class="round-dot${i<round?' done-r':i===round?' current-r':''}"></div>`).join('')}</div>
-      </div>
-      <div class="review-action"><button onclick="markReviewDone(${idx})">Erledigt ✓</button></div>
-    </div>`;
-  }).join('');
+  const due = state.done.filter(i => isDueToday(i));
+  const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  document.getElementById('todayList').innerHTML = due.length
+    ? due.map(idx => {
+        const c = chapFlat[idx], r = state.reviews[idx], round = r.rounds.length;
+        return `<div class="review-item urgent">
+          <div class="review-date"><div class="review-day" style="color:var(--red)">!</div><div class="review-month">heute</div></div>
+          <div class="review-info"><div class="review-chap">${c.title}</div>
+          <div class="review-meta">${c.actName} · Runde ${round+1}/${SR.length}</div>
+          <div class="round-dots">${SR.map((_,i)=>`<div class="round-dot${i<round?' done-r':i===round?' cur-r':''}"></div>`).join('')}</div></div>
+          <button class="btn btn-sm btn-history" onclick="markReview(${idx})">Erledigt</button>
+        </div>`;
+      }).join('')
+    : '<div style="text-align:center;padding:2rem;color:var(--text-dim);">Keine Wiederholungen heute fällig 🎉</div>';
 }
 
 function renderReview() {
-  const upcoming = done
-    .map(idx => ({ idx, next: getNextReviewDate(idx) }))
-    .filter(x => x.next !== null)
-    .sort((a,b) => a.next.localeCompare(b.next))
-    .slice(0, 60);
-
-  if (!upcoming.length) {
-    document.getElementById('reviewList').innerHTML = '<div class="empty-state">Keine anstehenden Wiederholungen.</div>';
-    return;
-  }
-
   const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-  document.getElementById('reviewList').innerHTML = upcoming.map(({idx, next}) => {
-    const c = chapFlat[idx];
-    const r = reviews[idx];
-    const round = r.rounds.length;
-    const d = new Date(next);
-    const isToday = next === todayStr();
-    const isPast = next < todayStr();
-    return `<div class="review-item${(isToday||isPast)?' urgent':''}">
-      <div class="review-date-block">
-        <div class="review-day" style="${(isToday||isPast)?'color:var(--red)':''}">${d.getDate()}</div>
-        <div class="review-month">${months[d.getMonth()]}</div>
-      </div>
-      <div class="review-info">
-        <div class="review-chap">${c.title}</div>
-        <div class="review-meta">${c.actName} · Runde ${round+1} von ${SR_INTERVALS.length}</div>
-        <div class="review-rounds">${SR_INTERVALS.map((_,i) => `<div class="round-dot${i<round?' done-r':i===round?' current-r':''}"></div>`).join('')}</div>
-      </div>
-      ${(isToday||isPast)?`<div class="review-action"><button onclick="markReviewDone(${idx})">Erledigt ✓</button></div>`:''}
-    </div>`;
-  }).join('');
+  const upcoming = state.done.map(idx => ({ idx, next: getNextReview(idx) }))
+    .filter(x => x.next).sort((a,b) => a.next.localeCompare(b.next)).slice(0,50);
+  document.getElementById('reviewList').innerHTML = upcoming.length
+    ? upcoming.map(({idx,next}) => {
+        const c = chapFlat[idx], r = state.reviews[idx], round = r.rounds.length;
+        const d = new Date(next), isPast = next <= todayStr();
+        return `<div class="review-item${isPast?' urgent':''}">
+          <div class="review-date"><div class="review-day" style="${isPast?'color:var(--red)':''}">${d.getDate()}</div><div class="review-month">${months[d.getMonth()]}</div></div>
+          <div class="review-info"><div class="review-chap">${c.title}</div>
+          <div class="review-meta">${c.actName} · Runde ${round+1}/${SR.length}</div>
+          <div class="round-dots">${SR.map((_,i)=>`<div class="round-dot${i<round?' done-r':i===round?' cur-r':''}"></div>`).join('')}</div></div>
+          ${isPast?`<button class="btn btn-sm btn-history" onclick="markReview(${idx})">Erledigt</button>`:''}
+        </div>`;
+      }).join('')
+    : '<div style="text-align:center;padding:2rem;color:var(--text-dim);">Keine anstehenden Wiederholungen.</div>';
 }
 
-// CALENDAR
-let calYear, calMonth;
-function renderCalendar() {
-  const today = new Date();
-  if (!calYear) { calYear = today.getFullYear(); calMonth = today.getMonth(); }
-  const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-  const days = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+function markReview(idx) {
+  if (!state.reviews[idx]) return;
+  state.reviews[idx].rounds.push(true);
+  saveState(); renderChapters(); renderHStats(); renderToday(); renderReview();
+  showToast('Wiederholung abgehakt!');
+}
 
-  // Build due date map
-  const dueMap = {};
-  done.forEach(idx => {
-    const next = getNextReviewDate(idx);
-    if (next) { if (!dueMap[next]) dueMap[next] = []; dueMap[next].push(idx); }
+function showHistorySub(name) {
+  ['chapters','today','review'].forEach(s => {
+    document.getElementById('hs-panel-'+s).style.display = s===name ? '' : 'none';
+    const btn = document.getElementById('hs-'+s);
+    if(btn) { btn.className = 'btn btn-sm' + (s===name?' btn-history':''); }
   });
-
-  const firstDay = new Date(calYear, calMonth, 1);
-  const lastDay = new Date(calYear, calMonth+1, 0);
-  let startDow = firstDay.getDay(); // 0=Sun
-  startDow = startDow === 0 ? 6 : startDow - 1; // Mon=0
-
-  let html = `<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-    <button class="cal-nav" onclick="calPrev()">←</button>
-    <span style="font-size:16px;font-weight:500;color:var(--text);flex:1;text-align:center;">${months[calMonth]} ${calYear}</span>
-    <button class="cal-nav" onclick="calNext()">→</button>
-  </div>
-  <div class="cal-grid">`;
-  days.forEach(d => html += `<div class="cal-day-name">${d}</div>`);
-  for (let i = 0; i < startDow; i++) html += `<div class="cal-day"></div>`;
-  for (let d = 1; d <= lastDay.getDate(); d++) {
-    const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = ds === todayStr();
-    const hasDue = dueMap[ds] && dueMap[ds].length > 0;
-    const count = hasDue ? dueMap[ds].length : 0;
-    html += `<div class="cal-day${hasDue?' has-due':''}${isToday?' today':''}" title="${hasDue?count+' Wiederholung(en)':''}">${d}${hasDue?`<span style="position:absolute;top:2px;right:3px;font-size:8px">${count}</span>`:''}
-    </div>`;
-  }
-  html += '</div>';
-  html += `<div style="display:flex;gap:16px;font-size:12px;color:var(--text-muted);margin-top:8px;">
-    <span><span style="display:inline-block;width:10px;height:10px;background:rgba(192,90,74,0.3);border-radius:3px;margin-right:4px;"></span>Wiederholungen fällig</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border:1px solid var(--gold);border-radius:3px;margin-right:4px;"></span>Heute</span>
-  </div>`;
-  document.getElementById('calendarWrap').innerHTML = html;
+  if (name==='today') renderToday();
+  if (name==='review') renderReview();
 }
-function calPrev() { calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
-function calNext() { calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
 
-// FLASHCARDS
-function renderLearn() {
-  if (!cards.length) { document.getElementById('learnContent').innerHTML='<div class="empty-state">Noch keine Karteikarten. Füge welche unter "Verwalten" hinzu.</div>'; return; }
-  if (learnIdx >= cards.length) learnIdx = 0;
-  learnFlipped = false;
-  const c = cards[learnIdx];
-  document.getElementById('learnContent').innerHTML = `
-    <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;text-align:center;">${learnIdx+1} von ${cards.length} Karten</div>
-    <div class="fc-wrap" onclick="flipCard()">
-      <div class="fc-inner" id="fcInner">
-        <div class="fc-face fc-front"><div class="fc-q">${c.q}</div>${c.chap!==undefined?`<div class="fc-chap">${chapFlat[c.chap]?.title||''}</div>`:''}<div class="fc-hint">Tippen zum Umdrehen</div></div>
-        <div class="fc-face fc-back"><div class="fc-a">${c.a}</div><div class="fc-hint">Tippen zum Umdrehen</div></div>
-      </div>
-    </div>
-    <div class="fc-nav">
-      <button class="btn" onclick="event.stopPropagation();prevCard()">← Zurück</button>
-      <button class="btn btn-gold" onclick="event.stopPropagation();shuffleCard()">Zufällig</button>
-      <button class="btn" onclick="event.stopPropagation();nextCard()">Weiter →</button>
-    </div>`;
-}
-function flipCard() { learnFlipped=!learnFlipped; document.getElementById('fcInner')?.classList.toggle('flipped',learnFlipped); }
-function nextCard() { learnIdx=(learnIdx+1)%cards.length; renderLearn(); }
-function prevCard() { learnIdx=(learnIdx-1+cards.length)%cards.length; renderLearn(); }
-function shuffleCard() { learnIdx=Math.floor(Math.random()*cards.length); renderLearn(); }
-
-// CARD MANAGEMENT
-function populateSelects() {
-  const s = document.getElementById('newChap'), f = document.getElementById('filterAct');
+function populateHChapSel() {
+  const s = document.getElementById('hcChap');
   s.innerHTML = '<option value="">– kein Kapitel –</option>';
   chapFlat.forEach((c,i) => s.innerHTML += `<option value="${i}">${c.title.substring(0,55)}</option>`);
-  f.innerHTML = '<option value="">Alle Akte</option>';
-  ACTS.forEach((a,i) => f.innerHTML += `<option value="${i}">${a.name.split('–')[0].trim()}</option>`);
-}
-function addCard() {
-  const q=document.getElementById('newQ').value.trim(), a=document.getElementById('newA').value.trim(), ch=document.getElementById('newChap').value;
-  if(!q||!a) return;
-  const card={q,a,id:Date.now()};
-  if(ch!=='') card.chap=parseInt(ch);
-  cards.push(card); saveState();
-  document.getElementById('newQ').value=''; document.getElementById('newA').value='';
-  renderCardList(); showToast('Karteikarte hinzugefügt!');
-}
-function deleteCard(id) { cards=cards.filter(c=>c.id!==id); saveState(); renderCardList(); }
-function renderCardList() {
-  const fa=document.getElementById('filterAct')?.value;
-  let f=cards;
-  if(fa) { const ai=parseInt(fa); f=cards.filter(c=>c.chap!==undefined&&chapFlat[c.chap]?.act===ai); }
-  document.getElementById('cardList').innerHTML = f.length
-    ? f.map(c=>`<div class="card-item"><div class="card-item-q">${c.q}</div><div class="card-item-a">${c.a}</div>${c.chap!==undefined?`<div class="card-item-meta">${chapFlat[c.chap]?.title||''}</div>`:''}<div class="row-actions"><button class="btn btn-sm btn-danger" onclick="deleteCard(${c.id})">Löschen</button></div></div>`).join('')
-    : '<div class="empty-state">Keine Karteikarten.</div>';
 }
 
-// EXPORT / IMPORT
-function doExport() {
-  const data={done,reviews,cards,v:1};
-  const json=btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-  document.getElementById('exportOut').innerHTML=`<div style="margin-top:14px;"><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;">Exportcode</label><textarea class="code-area" readonly onclick="this.select()">${json}</textarea><button class="btn btn-gold" style="margin-top:6px;" onclick="copyText('${json}')">In Zwischenablage kopieren</button></div>`;
+function addHCard() {
+  const q = document.getElementById('hcQ').value.trim(), a = document.getElementById('hcA').value.trim();
+  if (!q||!a) return;
+  const card = { q, a, id: Date.now() };
+  const ch = document.getElementById('hcChap').value;
+  if (ch) card.chap = parseInt(ch);
+  state.hCards.push(card); saveState();
+  document.getElementById('hcQ').value=''; document.getElementById('hcA').value='';
+  renderHCards(); showToast('Karteikarte hinzugefügt!');
 }
-function copyText(t) { navigator.clipboard.writeText(t).then(()=>showToast('Kopiert!')).catch(()=>showToast('Bitte manuell kopieren')); }
+
+function renderHCards() {
+  if (!state.hCards.length) { document.getElementById('hLearnWrap').innerHTML=''; document.getElementById('hFcNav').style.display='none'; document.getElementById('hCardList').innerHTML='<div style="color:var(--text-dim);font-size:13px;">Noch keine Karteikarten.</div>'; return; }
+  if (hLearnIdx >= state.hCards.length) hLearnIdx=0;
+  hFlipped=false;
+  const c = state.hCards[hLearnIdx];
+  document.getElementById('hFcNav').style.display='flex';
+  document.getElementById('hLearnWrap').innerHTML = `
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;text-align:center;">${hLearnIdx+1} von ${state.hCards.length}</div>
+    <div class="fc-wrap" onclick="hFlip()">
+      <div class="fc-inner" id="hFc">
+        <div class="fc-face fc-front"><div class="fc-q">${c.q}</div>${c.chap!==undefined?`<div style="font-size:11px;color:var(--text-dim);margin-top:8px;">${chapFlat[c.chap]?.title||''}</div>`:''}<div class="fc-hint">Tippen zum Umdrehen</div></div>
+        <div class="fc-face fc-back fc-back-history"><div class="fc-a" style="color:var(--history)">${c.a}</div><div class="fc-hint">Tippen zum Umdrehen</div></div>
+      </div>
+    </div>`;
+  document.getElementById('hCardList').innerHTML = state.hCards.map(c=>`<div class="log-item"><span class="log-type">${c.q}</span><span class="log-dur">${c.a.substring(0,40)}…</span><button class="btn btn-sm btn-danger" onclick="deleteHCard(${c.id})">×</button></div>`).join('');
+}
+
+function hFlip() { hFlipped=!hFlipped; document.getElementById('hFc')?.classList.toggle('flipped',hFlipped); }
+function hNext() { hLearnIdx=(hLearnIdx+1)%state.hCards.length; renderHCards(); }
+function hPrev() { hLearnIdx=(hLearnIdx-1+state.hCards.length)%state.hCards.length; renderHCards(); }
+function hShuffle() { hLearnIdx=Math.floor(Math.random()*state.hCards.length); renderHCards(); }
+function deleteHCard(id) { state.hCards=state.hCards.filter(c=>c.id!==id); saveState(); renderHCards(); }
+
+// ══════════════════════════════════ SPORT ══════════════════════════════════
+
+function renderSStats() {
+  const streak = calcSportStreak();
+  const thisWeek = Object.keys(state.sportDone).filter(d => {
+    const now = new Date(), startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay() + (now.getDay()===0?-6:1));
+    return d >= startOfWeek.toISOString().slice(0,10) && d <= todayStr();
+  }).length;
+  document.getElementById('s-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Streak</div><div class="stat-value" style="color:var(--sport-mid)">${streak}</div><div class="stat-sub">Tage in Folge</div></div>
+    <div class="stat-card"><div class="stat-label">Diese Woche</div><div class="stat-value" style="color:var(--sport-mid)">${thisWeek}</div><div class="stat-sub">Einheiten</div></div>
+    <div class="stat-card"><div class="stat-label">Gesamt</div><div class="stat-value" style="color:var(--sport-mid)">${state.sportLog.length}</div><div class="stat-sub">Einheiten geloggt</div></div>`;
+  document.getElementById('sportStreakBadge').innerHTML = `<div style="font-family:'Fraunces',serif;font-size:32px;color:var(--sport-mid);">${streak} 🔥</div>`;
+}
+
+function calcSportStreak() {
+  let streak=0, d=new Date();
+  while(true) {
+    const ds=d.toISOString().slice(0,10);
+    if(state.sportDone[ds]) { streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function renderWeekGrid() {
+  const today = new Date();
+  const todayDow = today.getDay();
+  // Get Mon-Sun of current week
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - (todayDow===0 ? 6 : todayDow-1));
+  const days = [1,2,3,4,5,6,0];
+  let html = '';
+  days.forEach((dow, i) => {
+    const d = new Date(monday); d.setDate(monday.getDate()+i);
+    const ds = d.toISOString().slice(0,10);
+    const plan = TRAIN_PLAN[dow];
+    const isToday = dow === todayDow;
+    const isDone = !!state.sportDone[ds];
+    html += `<div class="week-day${isToday?' today-wd':''}${isDone?' done-wd':''}" onclick="toggleSportDay('${ds}')">
+      <div class="wd-name">${plan.name.substring(0,2)}</div>
+      <div class="wd-exercise${plan.type==='rest'?' wd-rest':''}">${plan.exercise}</div>
+      <div class="wd-check">${isDone?'✅':plan.type==='rest'?'😴':''}</div>
+    </div>`;
+  });
+  document.getElementById('weekGrid').innerHTML = html;
+
+  // Today workout card
+  const plan = TRAIN_PLAN[todayDow];
+  const todayDs = todayStr();
+  const done = !!state.sportDone[todayDs];
+  document.getElementById('todayWorkout').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div>
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:4px;">Heute · ${plan.name}</div>
+        <div style="font-family:'Fraunces',serif;font-size:20px;color:var(--sport)">${plan.exercise}</div>
+      </div>
+      <div style="margin-left:auto;">
+        <button class="btn${done?' btn-sport':''}" onclick="toggleSportDay('${todayDs}')">${done?'✓ Erledigt':'Als erledigt markieren'}</button>
+      </div>
+    </div>`;
+}
+
+function toggleSportDay(ds) {
+  if (state.sportDone[ds]) delete state.sportDone[ds];
+  else state.sportDone[ds] = true;
+  saveState(); renderWeekGrid(); renderSStats();
+}
+
+function addLog() {
+  const type=document.getElementById('logType').value.trim(), dur=document.getElementById('logDur').value, date=document.getElementById('logDate').value||todayStr();
+  if(!type) return;
+  state.sportLog.unshift({ type, dur: dur||'', date, id: Date.now() });
+  saveState(); renderTrainingLog(); showToast('Einheit eingetragen!');
+}
+
+function renderTrainingLog() {
+  document.getElementById('trainingLog').innerHTML = state.sportLog.length
+    ? state.sportLog.slice(0,30).map(l=>`<div class="log-item"><span class="log-date">${l.date}</span><span class="log-type">${l.type}</span>${l.dur?`<span class="log-dur">${l.dur} min</span>`:''}<button class="btn btn-sm btn-danger" onclick="deleteLog(${l.id})">×</button></div>`).join('')
+    : '<div style="color:var(--text-dim);font-size:13px;">Noch keine Einträge.</div>';
+}
+
+function deleteLog(id) { state.sportLog=state.sportLog.filter(l=>l.id!==id); saveState(); renderTrainingLog(); }
+
+function renderSportStreak() {
+  const today=new Date(), days=[];
+  for(let i=27;i>=0;i--) { const d=new Date(today); d.setDate(today.getDate()-i); days.push(d); }
+  const dowNames=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  let html='<div class="streak-row">';
+  days.forEach(d => {
+    const ds=d.toISOString().slice(0,10), isToday=ds===todayStr(), done=!!state.sportDone[ds];
+    html+=`<div class="streak-day${done?' done-sport':''}${isToday?' today':''}" onclick="toggleSportDay('${ds}')">
+      <span>${d.getDate()}</span>
+      <span class="streak-label">${dowNames[d.getDay()]}</span>
+    </div>`;
+  });
+  html+='</div>';
+  document.getElementById('sportStreakGrid').innerHTML=html;
+}
+
+function showSportSub(name) {
+  ['week','log','streak'].forEach(s => {
+    document.getElementById('ss-panel-'+s).style.display=s===name?'':'none';
+    const btn=document.getElementById('ss-'+s);
+    if(btn) btn.className='btn btn-sm'+(s===name?' btn-sport':'');
+  });
+  if(name==='log') { renderTrainingLog(); document.getElementById('logDate').value=todayStr(); }
+  if(name==='streak') renderSportStreak();
+}
+
+// ══════════════════════════════════ LANGUAGES ══════════════════════════════════
+
+function showLang(lang) {
+  curLang=lang;
+  document.querySelectorAll('.lang-tab').forEach((el,i) => el.classList.toggle('active',['es','fr','sv'][i]===lang));
+  renderLang();
+}
+
+function renderLang() {
+  const lang=curLang, L=LANGS[lang];
+  const streak=calcLangStreak(lang);
+  const todayDone=!!state.langStreak[lang][todayStr()];
+  const totalMin=Object.values(state.langMinutes[lang]).reduce((a,b)=>a+b,0);
+  const cards=state.langCards[lang]||[];
+
+  let html=`
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Streak</div><div class="stat-value" style="color:var(--lang-mid)">${streak}</div><div class="stat-sub">Tage in Folge</div></div>
+      <div class="stat-card"><div class="stat-label">Heute</div><div class="stat-value" style="color:${todayDone?'var(--lang-mid)':'var(--text-dim)'}">${todayDone?'✓':'–'}</div><div class="stat-sub">${todayDone?'gelernt':'noch offen'}</div></div>
+      <div class="stat-card"><div class="stat-label">Minuten gesamt</div><div class="stat-value" style="color:var(--lang-mid)">${totalMin}</div><div class="stat-sub">eingetragen</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px;">${L.flag} Heute eintragen</div>
+      <div class="min-log-row">
+        <input type="number" id="minInput" placeholder="Minuten (z.B. 20)" min="1" style="width:160px;border:1px solid var(--border2);border-radius:var(--radius);padding:8px 10px;font-size:14px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;">
+        <select id="actInput" style="border:1px solid var(--border2);border-radius:var(--radius);padding:8px 10px;font-size:14px;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;">
+          <option>Clozemaster</option>
+          <option>Languatalk AI</option>
+          <option>Lesen</option>
+          <option>Hören</option>
+          <option>Sprechen</option>
+          <option>Sonstiges</option>
+        </select>
+        <button class="btn btn-lang" onclick="logLang()">Eintragen</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px;">
+      <button class="btn btn-sm btn-lang" id="ls-streak" onclick="showLangSub('streak')">Streak</button>
+      <button class="btn btn-sm" id="ls-cards" onclick="showLangSub('cards')">Vokabeln (${cards.length})</button>
+    </div>
+    <div id="ls-panel-streak">
+      <div class="section-title">Letzte 4 Wochen</div>
+      <div class="streak-row" id="langStreakGrid"></div>
+    </div>
+    <div id="ls-panel-cards" style="display:none">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="form-row"><label>Vokabel / Frage</label><input type="text" id="lcQ" placeholder="z.B. hablar"></div>
+        <div class="form-row"><label>Übersetzung / Antwort</label><input type="text" id="lcA" placeholder="z.B. sprechen"></div>
+        <button class="btn btn-lang" onclick="addLCard()">Hinzufügen</button>
+      </div>
+      <div id="lcLearnWrap"></div>
+      <div class="fc-nav" id="lcFcNav" style="display:none">
+        <button class="btn btn-sm" onclick="lcPrev()">← Zurück</button>
+        <button class="btn btn-sm btn-lang" onclick="lcShuffle()">Zufällig</button>
+        <button class="btn btn-sm" onclick="lcNext()">Weiter →</button>
+      </div>
+      <div id="lcCardList"></div>
+    </div>`;
+
+  document.getElementById('langContent').innerHTML=html;
+  renderLangStreakGrid();
+}
+
+let lcIdx=0, lcFlipped=false;
+
+function renderLangStreakGrid() {
+  const lang=curLang, today=new Date(), days=[];
+  for(let i=27;i>=0;i--) { const d=new Date(today); d.setDate(today.getDate()-i); days.push(d); }
+  const dowNames=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  let html='';
+  days.forEach(d => {
+    const ds=d.toISOString().slice(0,10), isToday=ds===todayStr(), done=!!state.langStreak[lang][ds];
+    html+=`<div class="streak-day${done?' done-lang':''}${isToday?' today':''}" onclick="toggleLangDay('${ds}')" title="${ds}"><span>${d.getDate()}</span><span class="streak-label">${dowNames[d.getDay()]}</span></div>`;
+  });
+  const el=document.getElementById('langStreakGrid');
+  if(el) el.innerHTML=html;
+}
+
+function showLangSub(name) {
+  ['streak','cards'].forEach(s => {
+    const p=document.getElementById('ls-panel-'+s); if(p) p.style.display=s===name?'':'none';
+    const b=document.getElementById('ls-'+s); if(b) b.className='btn btn-sm'+(s===name?' btn-lang':'');
+  });
+  if(name==='cards') renderLCards();
+}
+
+function logLang() {
+  const min=parseInt(document.getElementById('minInput').value)||0;
+  const act=document.getElementById('actInput').value;
+  const ds=todayStr();
+  state.langStreak[curLang][ds]=true;
+  if(!state.langMinutes[curLang][ds]) state.langMinutes[curLang][ds]=0;
+  state.langMinutes[curLang][ds]+=min;
+  saveState(); renderLang(); showToast(`${min} Min ${act} eingetragen!`);
+}
+
+function toggleLangDay(ds) {
+  if(state.langStreak[curLang][ds]) delete state.langStreak[curLang][ds];
+  else state.langStreak[curLang][ds]=true;
+  saveState(); renderLang();
+}
+
+function calcLangStreak(lang) {
+  let streak=0; const d=new Date();
+  while(true) {
+    const ds=d.toISOString().slice(0,10);
+    if(state.langStreak[lang][ds]) { streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function addLCard() {
+  const q=document.getElementById('lcQ').value.trim(), a=document.getElementById('lcA').value.trim();
+  if(!q||!a) return;
+  if(!state.langCards[curLang]) state.langCards[curLang]=[];
+  state.langCards[curLang].push({q,a,id:Date.now()});
+  saveState(); document.getElementById('lcQ').value=''; document.getElementById('lcA').value='';
+  renderLCards(); showToast('Vokabel hinzugefügt!');
+}
+
+function renderLCards() {
+  const cards=state.langCards[curLang]||[];
+  if(!cards.length) { document.getElementById('lcLearnWrap').innerHTML=''; document.getElementById('lcFcNav').style.display='none'; document.getElementById('lcCardList').innerHTML='<div style="color:var(--text-dim);font-size:13px;">Noch keine Vokabeln.</div>'; return; }
+  if(lcIdx>=cards.length) lcIdx=0;
+  lcFlipped=false;
+  const c=cards[lcIdx];
+  document.getElementById('lcFcNav').style.display='flex';
+  document.getElementById('lcLearnWrap').innerHTML=`
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;text-align:center;">${lcIdx+1} von ${cards.length}</div>
+    <div class="fc-wrap" onclick="lcFlip()">
+      <div class="fc-inner" id="lcFc">
+        <div class="fc-face fc-front"><div class="fc-q">${c.q}</div><div class="fc-hint">Tippen zum Umdrehen</div></div>
+        <div class="fc-face fc-back fc-back-lang"><div class="fc-a" style="color:var(--lang)">${c.a}</div><div class="fc-hint">Tippen zum Umdrehen</div></div>
+      </div>
+    </div>`;
+  document.getElementById('lcCardList').innerHTML=`<div class="section-title" style="margin-top:8px;">Alle Vokabeln</div>`+cards.map(c=>`<div class="log-item"><span class="log-type">${c.q}</span><span class="log-dur">${c.a}</span><button class="btn btn-sm btn-danger" onclick="deleteLCard(${c.id})">×</button></div>`).join('');
+}
+
+function lcFlip() { lcFlipped=!lcFlipped; document.getElementById('lcFc')?.classList.toggle('flipped',lcFlipped); }
+function lcNext() { const cards=state.langCards[curLang]||[]; lcIdx=(lcIdx+1)%cards.length; renderLCards(); }
+function lcPrev() { const cards=state.langCards[curLang]||[]; lcIdx=(lcIdx-1+cards.length)%cards.length; renderLCards(); }
+function lcShuffle() { const cards=state.langCards[curLang]||[]; lcIdx=Math.floor(Math.random()*cards.length); renderLCards(); }
+function deleteLCard(id) { state.langCards[curLang]=state.langCards[curLang].filter(c=>c.id!==id); saveState(); renderLCards(); }
+
+// ══════════════════════════════════ EXPORT / IMPORT ══════════════════════════════════
+
+function doExport() {
+  const json=btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+  document.getElementById('exportOut').innerHTML=`<textarea class="code-area" readonly onclick="this.select()" style="margin-top:10px;">${json}</textarea><button class="btn btn-sm" style="margin-top:6px;" onclick="navigator.clipboard.writeText('${json}').then(()=>showToast('Kopiert!'))">Kopieren</button>`;
+}
+
 function doImport() {
   try {
     const raw=document.getElementById('importIn').value.trim();
-    const data=JSON.parse(decodeURIComponent(escape(atob(raw))));
-    done=data.done||[]; reviews=data.reviews||{}; cards=data.cards||[];
-    saveState(); renderChapters(); showToast('Erfolgreich importiert!');
+    state=JSON.parse(decodeURIComponent(escape(atob(raw))));
+    saveState(); initAll(); showToast('Importiert!');
     document.getElementById('importIn').value='';
   } catch(e) { showToast('Fehler: Ungültiger Code'); }
 }
 
-// TAB NAVIGATION
-function showTab(name) {
-  document.querySelectorAll('.tab-panel').forEach(el=>el.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  if(name==='today') renderToday();
-  if(name==='review') renderReview();
-  if(name==='calendar') renderCalendar();
-  if(name==='learn') renderLearn();
-  if(name==='cards') { renderCardList(); populateSelects(); }
+// ══════════════════════════════════ HOME PAGE ══════════════════════════════════
+
+function renderHome() {
+  const ds = todayStr();
+  const h = new Date().getHours();
+  const greeting = h < 12 ? 'Guten Morgen!' : h < 17 ? 'Guten Tag!' : 'Guten Abend!';
+  document.getElementById('home-greeting').textContent = greeting;
+  const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const now = new Date();
+  document.getElementById('home-date').textContent = `${days[now.getDay()]}, ${now.getDate()}. ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+  const histDone = !!state.histStreak[ds];
+  const sportDone = !!state.sportDone[ds];
+  const esDone = !!state.langStreak.es[ds];
+  const frDone = !!state.langStreak.fr[ds];
+  const svDone = !!state.langStreak.sv[ds];
+
+  const histStreak = calcHistStreak();
+  const sStreak = calcSportStreak();
+
+  const items = [
+    { key:'history', icon:'📖', name:'Weltgeschichte', sub:'Kapitel gelesen', streak: histStreak, done: histDone, doneClass:'done-history' },
+    { key:'sport',   icon:'💪', name:'Sport',          sub: TRAIN_PLAN[now.getDay()]?.exercise || 'Training', streak: sStreak, done: sportDone, doneClass:'done-sport' },
+    { key:'lang-es', icon:'🇪🇸', name:'Spanisch',       sub:'Clozemaster / Languatalk', streak: calcLangStreak('es'), done: esDone, doneClass:'done-lang-es' },
+    { key:'lang-fr', icon:'🇫🇷', name:'Französisch',    sub:'Clozemaster / Languatalk', streak: calcLangStreak('fr'), done: frDone, doneClass:'done-lang-fr' },
+    { key:'lang-sv', icon:'🇸🇪', name:'Schwedisch',     sub:'Clozemaster / Languatalk', streak: calcLangStreak('sv'), done: svDone, doneClass:'done-lang-sv' },
+  ];
+
+  document.getElementById('homeStreaks').innerHTML = items.map(item => `
+    <div class="streak-card${item.done?' done-card '+item.doneClass:''}" onclick="toggleHomeStreak('${item.key}')">
+      <div class="sc-icon">${item.icon}</div>
+      <div class="sc-info">
+        <div class="sc-name">${item.name}</div>
+        <div class="sc-sub">${item.sub}</div>
+      </div>
+      <div class="sc-streak" style="color:${item.done?'inherit':'var(--text-dim)'}">${item.streak}🔥</div>
+      <div class="sc-check">${item.done?'✓':''}</div>
+    </div>`).join('');
+
+  renderHomeWeek();
+}
+
+function toggleHomeStreak(key) {
+  const ds = todayStr();
+  if (key === 'history') {
+    state.histStreak[ds] = !state.histStreak[ds];
+    if (!state.histStreak[ds]) delete state.histStreak[ds];
+  } else if (key === 'sport') {
+    if (state.sportDone[ds]) delete state.sportDone[ds];
+    else state.sportDone[ds] = true;
+  } else {
+    const lang = key.replace('lang-','');
+    state.langStreak[lang][ds] = !state.langStreak[lang][ds];
+    if (!state.langStreak[lang][ds]) delete state.langStreak[lang][ds];
+  }
+  saveState();
+  renderHome();
+}
+
+function calcHistStreak() {
+  let streak=0; const d=new Date();
+  while(true) {
+    const ds=d.toISOString().slice(0,10);
+    if(state.histStreak[ds]) { streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function renderHomeWeek() {
+  const today=new Date(), dow=today.getDay();
+  const monday=new Date(today);
+  monday.setDate(today.getDate()-(dow===0?6:dow-1));
+  const dowNames=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  const weekDays=[1,2,3,4,5,6,0];
+  let html='<div class="home-week">';
+  weekDays.forEach((d,i) => {
+    const date=new Date(monday); date.setDate(monday.getDate()+i);
+    const ds=date.toISOString().slice(0,10);
+    const isToday=ds===todayStr();
+    const hDone=!!state.histStreak[ds];
+    const sDone=!!state.sportDone[ds];
+    const langDone=!!(state.langStreak.es[ds]||state.langStreak.fr[ds]||state.langStreak.sv[ds]);
+    html+=`<div class="home-week-day${isToday?' hwd-today':''}">
+      <div class="hwd-name">${dowNames[date.getDay()]}</div>
+      <div style="font-size:11px;color:var(--text-muted)">${date.getDate()}</div>
+      <div class="hwd-dots">
+        <div class="hwd-dot${hDone?' dot-history':''}" title="Weltgeschichte"></div>
+        <div class="hwd-dot${sDone?' dot-sport':''}" title="Sport"></div>
+        <div class="hwd-dot${langDone?' dot-lang':''}" title="Sprachen"></div>
+      </div>
+    </div>`;
+  });
+  html+='</div><div style="display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(--text-muted)"><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--history-mid);margin-right:4px;"></span>Geschichte</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sport-mid);margin-right:4px;"></span>Sport</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lang-mid);margin-right:4px;"></span>Sprachen</span></div>';
+  document.getElementById('homeWeekGrid').innerHTML=html;
+}
+
+// ══════════════════════════════════ NAVIGATION ══════════════════════════════════
+
+function showPage(name) {
+  ['home','history','sport','lang'].forEach(p => {
+    document.getElementById('page-'+p).classList.toggle('active',p===name);
+    const tab=document.getElementById('tab-'+p);
+    if(tab) tab.className='nav-tab'+(p===name?(name==='home'?' active-history':' active-'+p):'');
+    const btab=document.getElementById('btab-'+p);
+    if(btab) btab.className='bottom-tab'+(p===name?(name==='home'?' active-home':' active-'+p):'');
+  });
+  if(name==='home') renderHome();
+  if(name==='sport') { renderWeekGrid(); renderSStats(); }
+  if(name==='lang') renderLang();
+  window.scrollTo(0,0);
 }
 
 function showToast(msg) {
@@ -905,8 +1340,16 @@ function showToast(msg) {
   setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-// INIT
-buildFlat(); loadState(); renderChapters();
+function initAll() {
+  buildFlat(); loadState();
+  renderChapters(); renderHStats();
+  renderHome();
+  document.getElementById('page-home').classList.add('active');
+  document.getElementById('tab-home').className='nav-tab active-history';
+  document.getElementById('btab-home').className='bottom-tab active-home';
+}
+
+initAll();
 </script>
 </body>
 </html>
