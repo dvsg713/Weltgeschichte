@@ -632,12 +632,25 @@ body {
   </div>
   <div id="ss-panel-log" style="display:none">
     <div class="card" style="margin-bottom:14px;">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
-        <div class="form-row" style="flex:1;min-width:120px;margin-bottom:0;"><label>Art</label><input type="text" id="logType" placeholder="z.B. Laufen, Gym…"></div>
-        <div class="form-row" style="width:90px;margin-bottom:0;"><label>Minuten</label><input type="number" id="logDur" placeholder="45" min="1"></div>
-        <div class="form-row" style="width:130px;margin-bottom:0;"><label>Datum</label><input type="date" id="logDate"></div>
-        <button class="btn btn-sport btn-sm" onclick="addLog()" style="margin-bottom:1px;">Eintragen</button>
+      <div class="form-row">
+        <label>Art</label>
+        <select id="logType" onchange="updateLogForm()">
+          <option value="laufen">🏃 Laufen</option>
+          <option value="intervall">⚡ Intervallläufe</option>
+          <option value="burpees">💥 Burpees</option>
+          <option value="klimmzuege">🔝 Klimmzüge</option>
+          <option value="liegestuetze">💪 Liegestütze</option>
+          <option value="mobility">🧘 Mobility</option>
+          <option value="dehnen">🤸 Dehnen</option>
+          <option value="freitext">📝 Freitext</option>
+        </select>
       </div>
+      <div id="logFields"></div>
+      <div class="form-row" style="margin-bottom:10px;">
+        <label>Datum</label>
+        <input type="date" id="logDate">
+      </div>
+      <button class="btn btn-sport" onclick="addLog()">Eintragen</button>
     </div>
     <div class="section-title">Trainingslog</div>
     <div id="trainingLog"></div>
@@ -1016,17 +1029,79 @@ function toggleSportDay(ds) {
   saveState(); renderWeekGrid(); renderSStats();
 }
 
+function updateLogForm() {
+  const type = document.getElementById('logType').value;
+  let html = '';
+  if (type === 'laufen' || type === 'intervall') {
+    html = `
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div class="form-row" style="margin-bottom:0;"><label>Distanz (km)</label><input type="number" id="logDist" placeholder="10.5" step="0.1" min="0"></div>
+        <div class="form-row" style="margin-bottom:0;"><label>Dauer (min)</label><input type="number" id="logDur" placeholder="50" min="1"></div>
+        <div class="form-row" style="margin-bottom:0;"><label>Pace (min/km)</label><input type="text" id="logPace" placeholder="5:20"></div>
+      </div>`;
+  } else if (type === 'burpees' || type === 'klimmzuege' || type === 'liegestuetze') {
+    html = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div class="form-row" style="margin-bottom:0;"><label>Wiederholungen</label><input type="number" id="logReps" placeholder="50" min="1"></div>
+        <div class="form-row" style="margin-bottom:0;"><label>Sätze</label><input type="number" id="logSets" placeholder="3" min="1"></div>
+      </div>`;
+  } else if (type === 'mobility' || type === 'dehnen') {
+    html = `<div class="form-row" style="margin-bottom:10px;"><label>Dauer (min)</label><input type="number" id="logDur" placeholder="20" min="1"></div>`;
+  } else {
+    html = `<div class="form-row" style="margin-bottom:10px;"><label>Notiz</label><input type="text" id="logNote" placeholder="Was hast du gemacht?"></div>`;
+  }
+  document.getElementById('logFields').innerHTML = html;
+}
+
 function addLog() {
-  const type=document.getElementById('logType').value.trim(), dur=document.getElementById('logDur').value, date=document.getElementById('logDate').value||todayStr();
-  if(!type) return;
-  state.sportLog.unshift({ type, dur: dur||'', date, id: Date.now() });
+  const type = document.getElementById('logType').value;
+  const date = document.getElementById('logDate').value || todayStr();
+  const typeLabels = { laufen:'🏃 Laufen', intervall:'⚡ Intervallläufe', burpees:'💥 Burpees', klimmzuege:'🔝 Klimmzüge', liegestuetze:'💪 Liegestütze', mobility:'🧘 Mobility', dehnen:'🤸 Dehnen', freitext:'📝 Notiz' };
+  let details = '', summary = '';
+
+  if (type === 'laufen' || type === 'intervall') {
+    const dist = document.getElementById('logDist')?.value;
+    const dur = document.getElementById('logDur')?.value;
+    const pace = document.getElementById('logPace')?.value;
+    details = { dist, dur, pace };
+    const parts = [];
+    if (dist) parts.push(dist + ' km');
+    if (dur) parts.push(dur + ' min');
+    if (pace) parts.push(pace + ' /km');
+    summary = parts.join(' · ');
+  } else if (['burpees','klimmzuege','liegestuetze'].includes(type)) {
+    const reps = document.getElementById('logReps')?.value;
+    const sets = document.getElementById('logSets')?.value;
+    details = { reps, sets };
+    const parts = [];
+    if (sets) parts.push(sets + ' Sätze');
+    if (reps) parts.push(reps + ' Wdh.');
+    summary = parts.join(' × ');
+  } else if (['mobility','dehnen'].includes(type)) {
+    const dur = document.getElementById('logDur')?.value;
+    details = { dur };
+    summary = dur ? dur + ' min' : '';
+  } else {
+    const note = document.getElementById('logNote')?.value?.trim();
+    details = { note };
+    summary = note || '';
+  }
+
+  if (!summary && !details) return;
+  state.sportLog.unshift({ type, label: typeLabels[type], details, summary, date, id: Date.now() });
   saveState(); renderTrainingLog(); showToast('Einheit eingetragen!');
 }
 
 function renderTrainingLog() {
   document.getElementById('trainingLog').innerHTML = state.sportLog.length
-    ? state.sportLog.slice(0,30).map(l=>`<div class="log-item"><span class="log-date">${l.date}</span><span class="log-type">${l.type}</span>${l.dur?`<span class="log-dur">${l.dur} min</span>`:''}<button class="btn btn-sm btn-danger" onclick="deleteLog(${l.id})">×</button></div>`).join('')
-    : '<div style="color:var(--text-dim);font-size:13px;">Noch keine Einträge.</div>';
+    ? state.sportLog.slice(0,40).map(l => `
+        <div class="log-item">
+          <span class="log-date">${l.date}</span>
+          <span class="log-type">${l.label || l.type}</span>
+          <span class="log-dur">${l.summary || ''}</span>
+          <button class="btn btn-sm btn-danger" onclick="deleteLog(${l.id})">×</button>
+        </div>`).join('')
+    : '<div style="color:var(--text-dim);font-size:13px;padding:8px 0;">Noch keine Einträge.</div>';
 }
 
 function deleteLog(id) { state.sportLog=state.sportLog.filter(l=>l.id!==id); saveState(); renderTrainingLog(); }
@@ -1053,7 +1128,7 @@ function showSportSub(name) {
     const btn=document.getElementById('ss-'+s);
     if(btn) btn.className='btn btn-sm'+(s===name?' btn-sport':'');
   });
-  if(name==='log') { renderTrainingLog(); document.getElementById('logDate').value=todayStr(); }
+  if(name==='log') { renderTrainingLog(); document.getElementById('logDate').value=todayStr(); updateLogForm(); }
   if(name==='streak') renderSportStreak();
 }
 
