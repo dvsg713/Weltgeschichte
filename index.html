@@ -447,6 +447,23 @@ body {
 .streak-card.done-lang-es .sc-check,
 .streak-card.done-lang-fr .sc-check,
 .streak-card.done-lang-sv .sc-check { background: var(--lang-mid); border-color: var(--lang-mid); color: #fff; }
+.streak-card.done-custom { border-color: #8b5cf6; background: rgba(139,92,246,0.10); }
+.streak-card.done-custom .sc-check { background: #8b5cf6; border-color: #8b5cf6; color: #fff; }
+
+/* SWIPE TO DELETE */
+.swipe-wrap { position: relative; overflow: hidden; border-radius: var(--radius-lg); margin-bottom: 10px; }
+.swipe-wrap .streak-card { margin-bottom: 0; border-radius: var(--radius-lg); transition: transform 0.2s ease; touch-action: pan-y; }
+.swipe-delete-bg {
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: 80px; background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 13px; font-weight: 500;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  opacity: 0; transition: opacity 0.15s;
+  pointer-events: none;
+}
+.swipe-wrap.swiping .swipe-delete-bg { opacity: 1; }
+.swipe-wrap.swiping .streak-card { box-shadow: -2px 0 8px rgba(0,0,0,0.08); }
 
 /* HOME WEEK GRID */
 .home-week { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
@@ -570,6 +587,13 @@ body {
   <div style="margin-top:28px;">
     <div class="section-title">Diese Woche</div>
     <div id="homeWeekGrid"></div>
+  </div>
+
+  <!-- HISTORY STREAK BACKFILL -->
+  <div style="margin-top:28px;">
+    <div class="section-title">Weltgeschichte – letzte 4 Wochen</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Tippe auf einen Tag um ihn nachträglich anzukreuzen.</p>
+    <div id="histStreakGrid"></div>
   </div>
 </div>
 
@@ -784,6 +808,8 @@ function loadState() {
       state = JSON.parse(raw);
       if (!state.histStreak) state.histStreak = {};
       if (!state.langStreak) state.langStreak = { es:{}, fr:{}, sv:{} };
+      if (!state.customRoutines) state.customRoutines = [];
+      if (!state.customStreak) state.customStreak = {};
       return;
     }
   } catch(e) {}
@@ -1317,7 +1343,7 @@ function renderHome() {
   const histStreak = calcHistStreak();
   const sStreak = calcSportStreak();
 
-  const items = [
+  const builtinItems = [
     { key:'history', icon:'📖', name:'Weltgeschichte', sub:'Kapitel gelesen', streak: histStreak, done: histDone, doneClass:'done-history' },
     { key:'sport',   icon:'💪', name:'Sport',          sub: TRAIN_PLAN[now.getDay()]?.exercise || 'Training', streak: sStreak, done: sportDone, doneClass:'done-sport' },
     { key:'lang-es', icon:'🇪🇸', name:'Spanisch',       sub:'Clozemaster / Languatalk', streak: calcLangStreak('es'), done: esDone, doneClass:'done-lang-es' },
@@ -1325,7 +1351,17 @@ function renderHome() {
     { key:'lang-sv', icon:'🇸🇪', name:'Schwedisch',     sub:'Clozemaster / Languatalk', streak: calcLangStreak('sv'), done: svDone, doneClass:'done-lang-sv' },
   ];
 
-  document.getElementById('homeStreaks').innerHTML = items.map(item => `
+  // Custom routines
+  const customItems = (state.customRoutines||[]).map(r => {
+    const done = !!(state.customStreak[r.id]||{})[ds];
+    const streak = calcCustomStreak(r.id);
+    return { key:'custom-'+r.id, icon: r.icon, name: r.name, sub: r.sub||'', streak, done, doneClass:'done-custom', id: r.id };
+  });
+
+  const allItems = [...builtinItems, ...customItems];
+
+  document.getElementById('homeStreaks').innerHTML = 
+    builtinItems.map(item => `
     <div class="streak-card${item.done?' done-card '+item.doneClass:''}" onclick="toggleHomeStreak('${item.key}')">
       <div class="sc-icon">${item.icon}</div>
       <div class="sc-info">
@@ -1334,26 +1370,142 @@ function renderHome() {
       </div>
       <div class="sc-streak" style="color:${item.done?'inherit':'var(--text-dim)'}">${item.streak}🔥</div>
       <div class="sc-check">${item.done?'✓':''}</div>
-    </div>`).join('');
+    </div>`).join('') +
+    customItems.map(item => `
+    <div class="swipe-wrap" id="swipe-${item.id}">
+      <div class="swipe-delete-bg">🗑 Löschen</div>
+      <div class="streak-card${item.done?' done-card done-custom':''}" onclick="toggleHomeStreak('${item.key}')">
+        <div class="sc-icon">${item.icon}</div>
+        <div class="sc-info">
+          <div class="sc-name">${item.name}</div>
+          <div class="sc-sub">${item.sub}</div>
+        </div>
+        <div class="sc-streak" style="color:${item.done?'inherit':'var(--text-dim)'}">${item.streak}🔥</div>
+        <div class="sc-check">${item.done?'✓':''}</div>
+      </div>
+    </div>`).join('') + `
+  <div style="margin-top:12px;">
+    <button class="btn btn-sm" onclick="showAddRoutine()" style="width:100%;border-style:dashed;color:var(--text-muted);">+ Neue Routine hinzufügen</button>
+  </div>
+  <div id="addRoutineForm" style="display:none;margin-top:10px;">
+    <div class="card">
+      <div style="font-size:13px;font-weight:500;margin-bottom:12px;">Neue Routine</div>
+      <div style="display:grid;grid-template-columns:60px 1fr;gap:8px;margin-bottom:8px;">
+        <div class="form-row" style="margin-bottom:0;"><label>Emoji</label><input type="text" id="newRoutineIcon" placeholder="🎯" maxlength="2" style="text-align:center;font-size:20px;"></div>
+        <div class="form-row" style="margin-bottom:0;"><label>Name</label><input type="text" id="newRoutineName" placeholder="z.B. Meditieren"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px;"><label>Beschreibung (optional)</label><input type="text" id="newRoutineSub" placeholder="z.B. 10 Minuten täglich"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+        <button onclick="addRoutine()" style="flex:1;min-width:120px;padding:10px 16px;border-radius:var(--radius);border:none;background:#c9962a;color:#ffffff !important;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;">✓ Hinzufügen</button>
+        <button onclick="document.getElementById('addRoutineForm').style.display='none'" style="flex:1;min-width:100px;padding:10px 16px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;">Abbrechen</button>
+      </div>
+    </div>
+  </div>`;
+
+  // Attach swipe listeners to custom routine cards
+  customItems.forEach(item => {
+    const wrap = document.getElementById('swipe-'+item.id);
+    if (wrap) attachSwipe(wrap, item.id);
+  });
 
   renderHomeWeek();
+  renderHistStreak();
 }
 
-function toggleHomeStreak(key) {
-  const ds = todayStr();
+function showAddRoutine() {
+  const f = document.getElementById('addRoutineForm');
+  f.style.display = f.style.display==='none' ? '' : 'none';
+}
+
+function addRoutine() {
+  const icon = document.getElementById('newRoutineIcon').value.trim() || '⭐';
+  const name = document.getElementById('newRoutineName').value.trim();
+  const sub  = document.getElementById('newRoutineSub').value.trim();
+  if (!name) return;
+  if (!state.customRoutines) state.customRoutines = [];
+  if (!state.customStreak) state.customStreak = {};
+  const id = 'r' + Date.now();
+  state.customRoutines.push({ id, icon, name, sub });
+  state.customStreak[id] = {};
+  saveState(); renderHome();
+  showToast('Routine hinzugefügt!');
+}
+
+function deleteRoutine(id) {
+  state.customRoutines = (state.customRoutines||[]).filter(r => r.id !== id);
+  delete state.customStreak[id];
+  saveState(); renderHome();
+}
+
+function attachSwipe(wrap, routineId) {
+  const card = wrap.querySelector('.streak-card');
+  let startX = 0, curX = 0, dragging = false;
+  const THRESHOLD = 80;
+
+  function onStart(e) {
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    dragging = true;
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    curX = (e.touches ? e.touches[0].clientX : e.clientX) - startX;
+    if (curX > 0) curX = 0; // only left swipe
+    card.style.transform = `translateX(${curX}px)`;
+    wrap.classList.toggle('swiping', curX < -20);
+    if (e.cancelable) e.preventDefault();
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    if (curX < -THRESHOLD) {
+      card.style.transform = `translateX(-80px)`;
+      setTimeout(() => deleteRoutine(routineId), 300);
+    } else {
+      card.style.transform = '';
+      wrap.classList.remove('swiping');
+    }
+    curX = 0;
+  }
+
+  wrap.addEventListener('touchstart', onStart, { passive: true });
+  wrap.addEventListener('touchmove', onMove, { passive: false });
+  wrap.addEventListener('touchend', onEnd);
+  // Mouse fallback for desktop
+  wrap.addEventListener('mousedown', onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onEnd);
+}
+
+function calcCustomStreak(id) {
+  const data = state.customStreak[id] || {};
+  let streak=0; const d=new Date();
+  while(true) {
+    const ds=d.toISOString().slice(0,10);
+    if(data[ds]) { streak++; d.setDate(d.getDate()-1); } else break;
+  }
+  return streak;
+}
+
+function toggleHomeStreak(key, ds) {
+  const date = ds || todayStr();
   if (key === 'history') {
-    state.histStreak[ds] = !state.histStreak[ds];
-    if (!state.histStreak[ds]) delete state.histStreak[ds];
+    state.histStreak[date] = !state.histStreak[date];
+    if (!state.histStreak[date]) delete state.histStreak[date];
   } else if (key === 'sport') {
-    if (state.sportDone[ds]) delete state.sportDone[ds];
-    else state.sportDone[ds] = true;
-  } else {
+    if (state.sportDone[date]) delete state.sportDone[date];
+    else state.sportDone[date] = true;
+  } else if (key.startsWith('lang-')) {
     const lang = key.replace('lang-','');
-    state.langStreak[lang][ds] = !state.langStreak[lang][ds];
-    if (!state.langStreak[lang][ds]) delete state.langStreak[lang][ds];
+    state.langStreak[lang][date] = !state.langStreak[lang][date];
+    if (!state.langStreak[lang][date]) delete state.langStreak[lang][date];
+  } else if (key.startsWith('custom-')) {
+    const id = key.replace('custom-','');
+    if (!state.customStreak[id]) state.customStreak[id] = {};
+    state.customStreak[id][date] = !state.customStreak[id][date];
+    if (!state.customStreak[id][date]) delete state.customStreak[id][date];
   }
   saveState();
-  renderHome();
+  if (ds) { renderHistStreak(); } else { renderHome(); }
 }
 
 function calcHistStreak() {
@@ -1364,6 +1516,24 @@ function calcHistStreak() {
     else break;
   }
   return streak;
+}
+
+// History streak backfill calendar
+function renderHistStreak() {
+  const el = document.getElementById('histStreakGrid');
+  if (!el) return;
+  const today=new Date(), days=[];
+  for(let i=27;i>=0;i--) { const d=new Date(today); d.setDate(today.getDate()-i); days.push(d); }
+  const dowNames=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  let html='<div class="streak-row">';
+  days.forEach(d => {
+    const ds=d.toISOString().slice(0,10), isToday=ds===todayStr(), done=!!state.histStreak[ds];
+    html+=`<div class="streak-day${done?' done-history':''}${isToday?' today':''}" onclick="toggleHomeStreak('history','${ds}')">
+      <span>${d.getDate()}</span><span class="streak-label">${dowNames[d.getDay()]}</span>
+    </div>`;
+  });
+  html+='</div>';
+  el.innerHTML = html;
 }
 
 function renderHomeWeek() {
